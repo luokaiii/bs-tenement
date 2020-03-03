@@ -1,0 +1,71 @@
+{
+  "front": {
+    "name": "前台用户系统",
+    "logo": ""
+  },
+  "backend": {
+    "name": "后台管理系统",
+    "menu": {
+      "mode": "inline",
+      "defaultOpenKeys": ["/b/sell", "/b/rent", "/b/system"],
+      "items": [
+        {
+          "name": "首页",
+          "icon": "home",
+          "path": "/b/home"
+        },
+        {
+          "name": "用户管理",
+          "icon": "idcard",
+          "path": "/b/user"
+        },
+        {
+          "name": "二手房管理",
+          "icon": "money-collect",
+          "path": "/b/sell",
+          "items": [
+            {
+              "name": "房屋管理",
+              "path": "/b/sell/list"
+            },
+            {
+              "name": "预约记录",
+              "path": "/b/sell/record"
+            }
+          ]
+        },
+        {
+          "name": "租房管理",
+          "icon": "schedule",
+          "path": "/b/rent",
+          "items": [
+            {
+              "name": "房屋管理",
+              "path": "/b/rent/list"
+            },
+            {
+              "name": "预约记录",
+              "path": "/b/rent/record"
+            }
+          ]
+        },
+        {
+          "name": "系统管理",
+          "icon": "setting",
+          "path": "/b/system",
+          "items": [
+            {
+              "name": "后台账户管理",
+              "path": "/b/system/admin/list"
+            }
+          ]
+        },
+        {
+          "name": "进入前台",
+          "icon": "cloud-sync",
+          "path": "/f/home"
+        }
+      ]
+    }
+  }
+}
