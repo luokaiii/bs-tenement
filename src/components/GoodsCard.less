@@ -1,0 +1,50 @@
+.goods-card {
+  width: 25%;
+  height: 210px;
+  padding: 0 5px;
+
+  .card {
+    cursor: pointer;
+    height: 210px;
+    border-radius: 5px;
+    border: 1px solid #eeeeee;
+
+    &:hover {
+      box-shadow: 0 5px 5px 0 #eeeeee;
+    }
+
+    .top {
+      height: 150px;
+      margin: 0;
+      background-color: #f1e29e;
+    }
+
+    .bottom {
+      height: 60px;
+      padding: 0 5px;
+      background-color: #d2f3a8;
+
+      .price {
+        height: 30px;
+        line-height: 30px;
+        display: flex;
+        justify-content: space-between;
+
+        .name {
+          font-size: 14px;
+        }
+
+        .price {
+          font-size: 20px;
+          color: red;
+        }
+      }
+
+      .desc {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+      }
+    }
+  }
+}

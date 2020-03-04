@@ -1,0 +1,91 @@
+.home {
+  max-width: 960px;
+  margin: 0 auto;
+
+  // 顶部轮播图
+  .d1 {
+    text-align: center;
+    .carousel {
+      height: 300px;
+      line-height: 300px;
+      text-align: center;
+      overflow: hidden;
+      background: #364d79;
+
+      img {
+        height: 300px;
+        max-width: 960px;
+        margin: 0 auto;
+      }
+    }
+    .d11 {
+      position: relative;
+      bottom: 68px;
+
+      .search {
+        height: 50px;
+        width: 500px;
+      }
+    }
+  }
+
+  // 四个icon
+  .d2 {
+    display: flex;
+    position: relative;
+    bottom: 20px;
+    height: 100px;
+
+    .d21 {
+      cursor: pointer;
+      font-size: 20px;
+      display: flex;
+      flex-direction: column;
+      width: 25%;
+      text-align: center;
+      border-right: 1px solid #eeeeee;
+
+      &:hover {
+        background-color: #eeeeee;
+      }
+
+      .icon {
+        font-size: 60px;
+        margin-bottom: 10px;
+      }
+    }
+  }
+
+  // 三个列表展示
+  .d3 {
+    height: 300px;
+
+    .more {
+      display: flex;
+      justify-content: space-between;
+      height: 60px;
+      line-height: 60px;
+      margin-bottom: 10px;
+      font-size: 24px;
+      color: rgb(235, 108, 108);
+      border-bottom: 5px solid rgb(235, 108, 108);
+
+      .pointer {
+        cursor: pointer;
+
+        &:hover {
+          color: rgb(255, 180, 42);
+        }
+      }
+
+      img {
+        height: 60px;
+        margin: 0 20px 0 10px;
+      }
+    }
+
+    .list {
+      display: flex;
+    }
+  }
+}

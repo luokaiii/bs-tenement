@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Tables from "../../../components/Tables";
 
-import { getByPage, create } from "../../../service/AdminService";
+import { getByPage } from "../../../service/AdminService";
 import { message, Button } from "antd";
 
 export const table = {

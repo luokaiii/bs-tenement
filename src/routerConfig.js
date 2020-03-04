@@ -1,4 +1,6 @@
 import FHome from "./pages/frontend/home";
+import FList from "./pages/frontend/list";
+import FDetail from "./pages/frontend/detail";
 import FLogin from "./pages/frontend/login";
 import FRegistry from "./pages/frontend/registry";
 import F404 from "./pages/frontend/404";
@@ -13,6 +15,14 @@ export const frontRoutes = [
   {
     path: "/f/home",
     component: FHome
+  },
+  {
+    path: "/f/list/:type",
+    component: FList
+  },
+  {
+    path: "/f/details/:id",
+    component: FDetail
   },
   {
     path: "/f/login",

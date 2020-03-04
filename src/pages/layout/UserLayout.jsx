@@ -9,7 +9,7 @@ export default () => {
   return (
     <div>
       <Layout className="layout">
-        <Layout.Header className="header">
+        <Layout.Header className="header1">
           <div className="top">
             <div className="left">
               <Link to="/f/home">
@@ -25,7 +25,7 @@ export default () => {
             </div>
           </div>
         </Layout.Header>
-        <Layout.Content className="content">
+        <Layout.Content className="content1">
           <Switch>
             {frontRoutes.map((v, i) => (
               <Route key={i} path={v.path} component={v.component} exact />
