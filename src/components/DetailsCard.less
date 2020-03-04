@@ -1,0 +1,90 @@
+.details-card {
+  position: relative;
+  height: 270px;
+  padding: 20px;
+  border-bottom: 1px solid #eeeeee;
+  overflow: hidden;
+
+  // 图片区域
+  .dc1 {
+    height: 170px;
+    display: flex;
+    overflow: hidden;
+
+    img {
+      border-radius: 3px;
+      width: 210px;
+      height: 160px;
+    }
+
+    .dc11 {
+      width: 210px;
+    }
+
+    .dc12 {
+      width: 65%;
+      padding-left: 20px;
+
+      .title {
+        font-size: 20px;
+        font-weight: 600;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .model {
+        height: 40px;
+        line-height: 40px;
+        letter-spacing: 3px;
+        font-size: 14px;
+        color: #3a3a3a;
+      }
+    }
+
+    .dc13 {
+      text-align: center;
+      width: 150px;
+      height: 50px;
+      line-height: 50px;
+      font-size: 22px;
+      color: red;
+    }
+  }
+
+  // 头像区域
+  .dc2 {
+    display: flex;
+    justify-content: space-between;
+
+    .dc21 {
+      height: 60px;
+      line-height: 60px;
+
+      img {
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
+        border-radius: 50%;
+        border: 1px solid #eeeeee;
+      }
+
+      .name {
+        font-size: 16px;
+        letter-spacing: 2px;
+      }
+
+      .tag {
+        color: #ffffff;
+        display: inline-block;
+        width: 30px;
+        height: 20px;
+        line-height: 20px;
+        font-size: 11px;
+        text-align: center;
+        background-color: rgb(126, 126, 243);
+        border-radius: 2px;
+      }
+    }
+  }
+}
