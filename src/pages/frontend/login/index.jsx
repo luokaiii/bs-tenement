@@ -12,7 +12,9 @@ export default Form.create()(({ form }) => {
         <h2 className="title">登 录</h2>
         <Form className="form">
           <Form.Item>
-            {getFieldDecorator("username")(
+            {getFieldDecorator("username", {
+              rules: [{ required: true, message: '用户名不能为空' }]
+            })(
               <Input
                 prefix={
                   <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
@@ -22,7 +24,9 @@ export default Form.create()(({ form }) => {
             )}
           </Form.Item>
           <Form.Item>
-            {getFieldDecorator("password")(
+            {getFieldDecorator("password", {
+              rules: [{ required: true, message: '密码不能为空' }]
+            })(
               <Input
                 prefix={
                   <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
