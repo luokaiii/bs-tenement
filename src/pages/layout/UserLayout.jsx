@@ -2,6 +2,7 @@ import React from "react";
 import { Layout, Button } from "antd";
 import { Switch, Route, Redirect, Link } from "react-router-dom";
 
+import Settings from "../../system-setting.json";
 import { frontRoutes } from "../../routerConfig";
 
 export default () => {
@@ -12,7 +13,7 @@ export default () => {
           <div className="top">
             <div className="left">
               <Link to="/f/home">
-                <h2>这里是logo</h2>
+                <h2>{Settings.front.name}</h2>
               </Link>
             </div>
             <div className="right">
