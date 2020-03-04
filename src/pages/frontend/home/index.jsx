@@ -10,25 +10,32 @@ export default () => {
     const values = [
       {
         icon: "border-left",
-        name: "二手房"
+        name: "二手房",
+        target: "/#/f/list/sell"
       },
       {
         icon: "border-top",
-        name: "出租房"
+        name: "出租房",
+        target: "/#/f/list/rent"
       },
       {
         icon: "border-bottom",
-        name: "出售报价"
+        name: "出售报价",
+        target: "/#/f/form/sell"
       },
       {
         icon: "border-right",
-        name: "出租报价"
+        name: "出租报价",
+        target: "/#/f/form/rent"
       }
     ];
+    const gotoList = t => {
+      window.location.href = t;
+    };
     return (
       <div className="d2">
         {values.map((v, i) => (
-          <div className="d21" key={i}>
+          <div className="d21" key={i} onClick={() => gotoList(v.target)}>
             <Icon type={v.icon} className="icon" />
             <div>{v.name}</div>
           </div>
@@ -68,13 +75,13 @@ export default () => {
         <Carousel autoplay className="carousel">
           <div>
             <img
-              src="http://cdn.baletoo.cn/Uploads/bnanerImageUrl/1/110/oss_5a6a8dcf34af5.png"
+              src="http://cdn.baletoo.cn/Uploads/bnanerImageUrl/1/148/oss_5c19e5a1063ea.jpg"
               alt=""
             />
           </div>
           <div>
             <img
-              src="http://cdn.baletoo.cn/Uploads/bnanerImageUrl/1/148/oss_5c19e5a1063ea.jpg"
+              src="http://cdn.baletoo.cn/Uploads/bnanerImageUrl/1/110/oss_5a6a8dcf34af5.png"
               alt=""
             />
           </div>

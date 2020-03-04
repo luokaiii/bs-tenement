@@ -4,17 +4,23 @@ import "./DetailsCard.less";
 import { Icon } from "antd";
 
 export default () => {
+  const gotoDetails = () => {
+    window.location.href = `/#/f/details/1`;
+  };
+
   return (
     <div className="details-card">
       <div className="dc1">
         <div className="dc11">
           <img
+            className="pointer"
+            onClick={gotoDetails}
             src="http://cdn.baletoo.cn/Uploads/housephoto/2958/2957860/oss_5dd77093bdfb5.png@!380_280.png"
             alt=""
           />
         </div>
         <div className="dc12">
-          <div className="title">
+          <div className="title pointer" onClick={gotoDetails}>
             绿泉公寓-静安 近地铁 可做饭 新上架 电梯房 智能电表
           </div>
           <div className="model">
