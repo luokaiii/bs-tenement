@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Table, Button } from "antd";
 
+import { getByPage } from "../../../service/HouseApi";
 import Search from "../../../components/Search";
 
 const HouseType = {
@@ -52,7 +53,8 @@ const columns = [
   {
     title: "封面",
     key: "cover",
-    dataIndex: "cover"
+    dataIndex: "cover",
+    render: t => <img src={t} alt="" height="40px" />
   },
   {
     title: "地址",
@@ -62,12 +64,14 @@ const columns = [
   {
     title: "价格",
     key: "price",
-    dataIndex: "price"
+    dataIndex: "price",
+    render: t => t + "元"
   },
   {
     title: "面积",
     key: "area",
-    dataIndex: "area"
+    dataIndex: "area",
+    render: t => t + " 平米"
   },
   {
     title: "发布人",
@@ -83,7 +87,40 @@ const columns = [
 ];
 
 export default ({ match }) => {
+  const [content, setContent] = useState({});
+  const [loading, setLoading] = useState(false);
   const { type, status } = match.params;
+
+  const loadData = useCallback(
+    (params = { page: 0, size: 10 }) => {
+      setLoading(true);
+      const data = Object.assign({ type, status }, params);
+      console.log(data);
+      getByPage(data)
+        .then(res => {
+          setContent(res.data);
+          setLoading(false);
+        })
+        .catch(() => {
+          setLoading(false);
+        });
+    },
+    [type, status]
+  );
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  const pagination = {
+    current: content.number + 1,
+    total: content.totalElements,
+    pageSize: content.size,
+    onChange: (page, size) => {
+      loadData({ page: page - 1 });
+    }
+  };
+
   return (
     <div>
       <div className="top">
@@ -94,8 +131,14 @@ export default ({ match }) => {
           </h2>
         </div>
       </div>
-      <Search searchItems={searchItems} />
-      <Table columns={columns} bordered />
+      <Search searchItems={searchItems} handleSearch={loadData} />
+      <Table
+        columns={columns}
+        bordered
+        loading={loading}
+        dataSource={content.content}
+        pagination={pagination}
+      />
     </div>
   );
 };
