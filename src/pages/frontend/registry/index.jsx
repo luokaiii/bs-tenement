@@ -87,6 +87,18 @@ export default Form.create()(({ form }) => {
             )}
           </Form.Item>
           <Form.Item>
+            {getFieldDecorator("phone", {
+              rules: [{ required: true, message: "联系方式不能为空" }]
+            })(
+              <Input
+                prefix={
+                  <Icon type="phone" style={{ color: "rgba(0,0,0,.25)" }} />
+                }
+                placeholder="请输入联系方式"
+              />
+            )}
+          </Form.Item>
+          <Form.Item>
             {getFieldDecorator("password", {
               rules: [
                 { required: true, message: "密码不能为空" },

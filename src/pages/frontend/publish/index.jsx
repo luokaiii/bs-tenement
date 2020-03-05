@@ -147,11 +147,13 @@ export default Form.create()(({ form, match }) => {
             <Row>
               <Col span={6}>
                 {getFieldDecorator("area", {
+                  initialValue: 20,
                   rules: [{ required: true, message: "房屋面积不能为空" }]
                 })(
                   <InputNumber
                     style={{ width: "100%" }}
                     placeholder="请输入房屋面积"
+                    formatter={value => `${value} 平米`}
                   />
                 )}
               </Col>
@@ -199,7 +201,7 @@ export default Form.create()(({ form, match }) => {
           </Form.Item>
           <Form.Item label="户型">
             {getFieldDecorator("plan", {
-              rules: [{ required: true, message: "关键词不能为空" }]
+              initialValue: 1
             })(
               <Radio.Group>
                 <Radio value={1}>一居室</Radio>

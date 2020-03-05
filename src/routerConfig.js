@@ -4,6 +4,7 @@ import FPublish from "./pages/frontend/publish";
 import FDetail from "./pages/frontend/detail";
 import FLogin from "./pages/frontend/login";
 import FRegistry from "./pages/frontend/registry";
+import FMe from './pages/frontend/me';
 import F404 from "./pages/frontend/404";
 
 import BHome from "./pages/backend/home";
@@ -36,6 +37,10 @@ export const frontRoutes = [
   {
     path: "/f/registry",
     component: FRegistry
+  },
+  {
+    path: "/f/me",
+    component: FMe
   },
   {
     path: "/f/404",

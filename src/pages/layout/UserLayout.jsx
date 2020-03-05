@@ -22,6 +22,9 @@ export default () => {
               </Button>
               <Button href="/#/f/login">登录</Button>
               <Button href="/#/f/registry">注册</Button>
+              <Button type="primary" href="/#/f/me">
+                个人中心
+              </Button>
             </div>
           </div>
         </Layout.Header>
