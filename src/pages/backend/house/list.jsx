@@ -24,6 +24,18 @@ const searchItems = [
   {
     key: "userNickname",
     label: "发布人"
+  },
+  {
+    key: "name",
+    label: "房屋名称"
+  },
+  {
+    key: "keys",
+    label: "关键词"
+  },
+  {
+    key: "estate",
+    label: "小区"
   }
 ];
 const columns = [

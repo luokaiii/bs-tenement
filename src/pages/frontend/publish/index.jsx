@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Form,
   Input,
@@ -9,9 +9,11 @@ import {
   Col,
   InputNumber,
   Select,
-  Radio
+  Radio,
+  message
 } from "antd";
 
+import { upload } from "../../../service/FileApi";
 import "./index.less";
 
 const HouseType = {
@@ -20,6 +22,8 @@ const HouseType = {
 };
 
 export default Form.create()(({ form, match }) => {
+  const [cover, setCover] = useState([]);
+  const [pictures, setPictures] = useState([]);
   const { getFieldDecorator } = form;
   const type = match.params.type;
 
@@ -29,6 +33,40 @@ export default Form.create()(({ form, match }) => {
         console.log("表单提交--------", values);
       }
     });
+  };
+
+  const customRequest = opt => {
+    upload(opt.file)
+      .then(res => {
+        const files = [];
+        files.push({
+          uid: files.length + 1,
+          name: "image.jpg",
+          status: "done",
+          url: res.data
+        });
+        setCover(files);
+      })
+      .catch(() => {
+        message.error("上传失败");
+      });
+  };
+
+  const customRequest2 = opt => {
+    upload(opt.file)
+      .then(res => {
+        const files = [...pictures];
+        files.push({
+          uid: files.length + 1,
+          name: "image.jpg",
+          status: "done",
+          url: res.data
+        });
+        setPictures(files);
+      })
+      .catch(() => {
+        message.error("上传失败");
+      });
   };
 
   return (
@@ -54,28 +92,36 @@ export default Form.create()(({ form, match }) => {
             })(<Input placeholder="请输入关键词" />)}
           </Form.Item>
           <Form.Item label="封面">
-            {getFieldDecorator("cover", {
-              rules: [{ required: true, message: "关键词不能为空" }]
-            })(
-              <Upload listType="picture-card">
-                <div>
-                  <Icon type="plus" />
-                  <div className="ant-upload-text">上传</div>
-                </div>
-              </Upload>
-            )}
+            <Upload
+              name="cover"
+              listType="picture-card"
+              accept=".png,.jpg,.jpeg,.gif"
+              fileList={cover}
+              customRequest={customRequest}
+            >
+              <div>
+                <Icon type="plus" />
+                <div className="ant-upload-text">上传</div>
+              </div>
+            </Upload>
           </Form.Item>
           <Form.Item label="详情图">
-            {getFieldDecorator("pictures", {
-              rules: [{ required: true, message: "关键词不能为空" }]
-            })(
-              <Upload listType="picture-card">
-                <div>
-                  <Icon type="plus" />
-                  <div className="ant-upload-text">上传</div>
-                </div>
-              </Upload>
-            )}
+            <Upload
+              name="pictures"
+              listType="picture-card"
+              fileList={pictures}
+              customRequest={customRequest2}
+              accept=".png,.jpg,.jpeg,.gif"
+            >
+              <div>
+                {pictures.length <= 8 && (
+                  <>
+                    <Icon type="plus" />
+                    <div className="ant-upload-text">上传</div>
+                  </>
+                )}
+              </div>
+            </Upload>
           </Form.Item>
           <Form.Item label="省市区">
             <Row>
