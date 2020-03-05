@@ -32,6 +32,17 @@ export const table = {
       title: "操作记录",
       key: "record",
       render: t => <Button type="link">登录历史</Button>
+    },
+    {
+      title: "操作",
+      key: "operate",
+      dataIndex: "disabled",
+      render: t =>
+        t ? (
+          <Button type="primary">启用</Button>
+        ) : (
+          <Button type="danger">禁用</Button>
+        )
     }
   ]
 };
@@ -92,12 +103,14 @@ export default () => {
   };
 
   return (
-    <Tables
-      table={table}
-      loading={loading}
-      data={data}
-      create={handleCreate}
-      onChange={handleChange}
-    />
+    <div>
+      <Tables
+        table={table}
+        loading={loading}
+        data={data}
+        create={handleCreate}
+        onChange={handleChange}
+      />
+    </div>
   );
 };

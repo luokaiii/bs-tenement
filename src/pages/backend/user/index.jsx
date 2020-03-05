@@ -1,9 +1,21 @@
 import React, { useState, useEffect } from "react";
 import Tables from "../../../components/Tables";
 
+import Search from "../../../components/Search";
 import { getByPage } from "../../../service/UserService";
 import { table } from "./constants";
 import { message } from "antd";
+
+const searchItems = [
+  {
+    key: "nickname",
+    label: "昵称"
+  },
+  {
+    key: "phone",
+    label: "联系方式"
+  }
+];
 
 export default () => {
   const [data, setData] = useState({
@@ -59,12 +71,20 @@ export default () => {
   const handleChange = () => {};
 
   return (
-    <Tables
-      table={table}
-      loading={loading}
-      data={data}
-      create={handleCreate}
-      onChange={handleChange}
-    />
+    <div>
+      <div className="top">
+        <div className="left">
+          <h2>前台用户管理</h2>
+        </div>
+      </div>
+      <Search searchItems={searchItems} />
+      <Tables
+        table={table}
+        loading={loading}
+        data={data}
+        create={handleCreate}
+        onChange={handleChange}
+      />
+    </div>
   );
 };

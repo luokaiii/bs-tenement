@@ -7,7 +7,7 @@
     "name": "后台管理系统",
     "menu": {
       "mode": "inline",
-      "defaultOpenKeys": ["/b/sell", "/b/rent", "/b/system"],
+      "defaultOpenKeys": ["/b/house/RENT", "/b/house/SELL", "/b/system"],
       "items": [
         {
           "name": "首页",
@@ -22,30 +22,46 @@
         {
           "name": "二手房管理",
           "icon": "money-collect",
-          "path": "/b/sell",
+          "path": "/b/house/SELL",
           "items": [
             {
               "name": "房屋管理",
-              "path": "/b/sell/list"
+              "path": "/b/house/SELL/ADDED"
             },
             {
-              "name": "预约记录",
-              "path": "/b/sell/record"
+              "name": "审核申请",
+              "path": "/b/house/SELL/CREATED"
+            },
+            {
+              "name": "下架房屋",
+              "path": "/b/house/SELL/OUT"
+            },
+            {
+              "name": "未通过记录",
+              "path": "/b/house/SELL/FAILED"
             }
           ]
         },
         {
           "name": "租房管理",
           "icon": "schedule",
-          "path": "/b/rent",
+          "path": "/b/house/RENT",
           "items": [
             {
               "name": "房屋管理",
-              "path": "/b/rent/list"
+              "path": "/b/house/RENT/ADDED"
             },
             {
-              "name": "预约记录",
-              "path": "/b/rent/record"
+              "name": "审核申请",
+              "path": "/b/house/RENT/CREATED"
+            },
+            {
+              "name": "下架房屋",
+              "path": "/b/house/RENT/OUT"
+            },
+            {
+              "name": "未通过记录",
+              "path": "/b/house/RENT/FAILED"
             }
           ]
         },
