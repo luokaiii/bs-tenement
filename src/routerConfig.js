@@ -1,5 +1,6 @@
 import FHome from "./pages/frontend/home";
 import FList from "./pages/frontend/list";
+import FPublish from "./pages/frontend/publish";
 import FDetail from "./pages/frontend/detail";
 import FLogin from "./pages/frontend/login";
 import FRegistry from "./pages/frontend/registry";
@@ -23,6 +24,10 @@ export const frontRoutes = [
   {
     path: "/f/details/:id",
     component: FDetail
+  },
+  {
+    path: "/f/publish/:type",
+    component: FPublish
   },
   {
     path: "/f/login",

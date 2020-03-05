@@ -21,12 +21,12 @@ export default () => {
       {
         icon: "border-bottom",
         name: "出售报价",
-        target: "/#/f/form/sell"
+        target: "/#/f/publish/SELL"
       },
       {
         icon: "border-right",
         name: "出租报价",
-        target: "/#/f/form/rent"
+        target: "/#/f/publish/RENT"
       }
     ];
     const gotoList = t => {
