@@ -14,6 +14,8 @@ import {
 } from "antd";
 
 import { upload } from "../../../service/FileApi";
+import { ping } from "../../../service/UserService";
+import { create } from "../../../service/HouseApi";
 import "./index.less";
 
 const HouseType = {
@@ -30,7 +32,39 @@ export default Form.create()(({ form, match }) => {
   const handleSubmit = () => {
     form.validateFields((err, values) => {
       if (!err) {
-        console.log("表单提交--------", values);
+        if (cover.length <= 0 || pictures.length <= 0) {
+          message.error("请先上传封面及详情图");
+          return;
+        }
+        ping()
+          .then(res => {
+            const { nickname, id, phone, avatar } = res.data;
+            const _cover = cover[0].url;
+            const _pictures = pictures.map(v => v.url);
+            return Object.assign(
+              {
+                type,
+                cover: _cover,
+                pictures: String(_pictures),
+                likeCount: 0,
+                userId: id,
+                userNickname: nickname,
+                userProfile: avatar,
+                userPhone: phone,
+                status: "CREATED",
+                createTime: new Date().getMilliseconds
+              },
+              values
+            );
+          })
+          .then(res => {
+            create(res).then(() => {
+              message.success("创建成功，2秒后跳转至个人中心");
+              setTimeout(() => {
+                window.location.href = "/#/f/me";
+              }, 2000);
+            });
+          });
       }
     });
   };
@@ -126,14 +160,18 @@ export default Form.create()(({ form, match }) => {
           <Form.Item label="省市区">
             <Row>
               <Col span={8}>
-                {getFieldDecorator("province", {
-                  rules: [{ required: true, message: "关键词不能为空" }]
-                })(<Input placeholder="请输入省份" />)}
+                <Form.Item>
+                  {getFieldDecorator("province", {
+                    rules: [{ required: true, message: "关键词不能为空" }]
+                  })(<Input placeholder="请输入省份" />)}
+                </Form.Item>
               </Col>
               <Col span={8}>
-                {getFieldDecorator("city", {
-                  rules: [{ required: true, message: "关键词不能为空" }]
-                })(<Input placeholder="请输入市区" />)}
+                <Form.Item>
+                  {getFieldDecorator("city", {
+                    rules: [{ required: true, message: "关键词不能为空" }]
+                  })(<Input placeholder="请输入市区" />)}
+                </Form.Item>
               </Col>
             </Row>
           </Form.Item>
@@ -163,28 +201,32 @@ export default Form.create()(({ form, match }) => {
             <Form.Item label="价格/付款方式">
               <Row>
                 <Col span={8}>
-                  {getFieldDecorator("price", {
-                    rules: [{ required: true, message: "价格不能为空" }]
-                  })(
-                    <InputNumber
-                      style={{ width: "100%" }}
-                      max={9999999}
-                      placeholder="请输入单月价格"
-                    />
-                  )}
+                  <Form.Item>
+                    {getFieldDecorator("price", {
+                      rules: [{ required: true, message: "价格不能为空" }]
+                    })(
+                      <InputNumber
+                        style={{ width: "100%" }}
+                        max={9999999}
+                        placeholder="请输入单月价格"
+                      />
+                    )}
+                  </Form.Item>
                 </Col>
                 <Col span={8}>
-                  {getFieldDecorator("priceType", {
-                    initialValue: "MONTH",
-                    rules: [{ required: true, message: "付款方式不能为空" }]
-                  })(
-                    <Select>
-                      <Select.Option value="MONTH">月付</Select.Option>
-                      <Select.Option value="QUARTER">季付</Select.Option>
-                      <Select.Option value="HALF">半年付</Select.Option>
-                      <Select.Option value="YEAR">年付</Select.Option>
-                    </Select>
-                  )}
+                  <Form.Item>
+                    {getFieldDecorator("priceType", {
+                      initialValue: "MONTH",
+                      rules: [{ required: true, message: "付款方式不能为空" }]
+                    })(
+                      <Select>
+                        <Select.Option value="MONTH">月付</Select.Option>
+                        <Select.Option value="QUARTER">季付</Select.Option>
+                        <Select.Option value="HALF">半年付</Select.Option>
+                        <Select.Option value="YEAR">年付</Select.Option>
+                      </Select>
+                    )}
+                  </Form.Item>
                 </Col>
               </Row>
             </Form.Item>
@@ -192,56 +234,64 @@ export default Form.create()(({ form, match }) => {
           <Form.Item label="面积/类型">
             <Row>
               <Col span={6}>
-                {getFieldDecorator("area", {
-                  initialValue: 20,
-                  rules: [{ required: true, message: "房屋面积不能为空" }]
-                })(
-                  <InputNumber
-                    style={{ width: "100%" }}
-                    placeholder="请输入房屋面积"
-                    formatter={value => `${value} 平米`}
-                  />
-                )}
+                <Form.Item>
+                  {getFieldDecorator("area", {
+                    initialValue: 20,
+                    rules: [{ required: true, message: "房屋面积不能为空" }]
+                  })(
+                    <InputNumber
+                      style={{ width: "100%" }}
+                      placeholder="请输入房屋面积"
+                      formatter={value => `${value} 平米`}
+                    />
+                  )}
+                </Form.Item>
               </Col>
               <Col span={6}>
-                {getFieldDecorator("ownerType", {
-                  initialValue: "ALL",
-                  rules: [{ required: true, message: "关键词不能为空" }]
-                })(
-                  <Select>
-                    <Select.Option value="ALL">整租</Select.Option>
-                    <Select.Option value="PART">合租</Select.Option>
-                    <Select.Option value="APART">公寓</Select.Option>
-                  </Select>
-                )}
+                <Form.Item>
+                  {getFieldDecorator("ownerType", {
+                    initialValue: "ALL",
+                    rules: [{ required: true, message: "关键词不能为空" }]
+                  })(
+                    <Select>
+                      <Select.Option value="ALL">整租</Select.Option>
+                      <Select.Option value="PART">合租</Select.Option>
+                      <Select.Option value="APART">公寓</Select.Option>
+                    </Select>
+                  )}
+                </Form.Item>
               </Col>
             </Row>
           </Form.Item>
           <Form.Item label="楼层/总楼层">
             <Row>
               <Col span={6}>
-                {getFieldDecorator("floor", {
-                  initialValue: 1,
-                  rules: [{ required: true, message: "楼层不能为空" }]
-                })(
-                  <InputNumber
-                    style={{ width: "100%" }}
-                    placeholder="请输入楼层"
-                    formatter={value => `第 ${value} 层`}
-                  />
-                )}
+                <Form.Item>
+                  {getFieldDecorator("floor", {
+                    initialValue: 1,
+                    rules: [{ required: true, message: "楼层不能为空" }]
+                  })(
+                    <InputNumber
+                      style={{ width: "100%" }}
+                      placeholder="请输入楼层"
+                      formatter={value => `第 ${value} 层`}
+                    />
+                  )}
+                </Form.Item>
               </Col>
               <Col span={6}>
-                {getFieldDecorator("floors", {
-                  initialValue: 18,
-                  rules: [{ required: true, message: "总楼层不能为空" }]
-                })(
-                  <InputNumber
-                    style={{ width: "100%" }}
-                    placeholder="请输入总楼层"
-                    formatter={value => `共有 ${value} 层`}
-                  />
-                )}
+                <Form.Item>
+                  {getFieldDecorator("floors", {
+                    initialValue: 18,
+                    rules: [{ required: true, message: "总楼层不能为空" }]
+                  })(
+                    <InputNumber
+                      style={{ width: "100%" }}
+                      placeholder="请输入总楼层"
+                      formatter={value => `共有 ${value} 层`}
+                    />
+                  )}
+                </Form.Item>
               </Col>
             </Row>
           </Form.Item>
@@ -261,40 +311,46 @@ export default Form.create()(({ form, match }) => {
           <Form.Item label="水电网费">
             <Row>
               <Col span={6}>
-                {getFieldDecorator("water", {
-                  initialValue: 6,
-                  rules: [{ required: true, message: "水费不能为空" }]
-                })(
-                  <InputNumber
-                    style={{ width: "100%" }}
-                    placeholder="请输入水费"
-                    formatter={value => `水费 ${value} 元/吨`}
-                  />
-                )}
+                <Form.Item>
+                  {getFieldDecorator("water", {
+                    initialValue: 6,
+                    rules: [{ required: true, message: "水费不能为空" }]
+                  })(
+                    <InputNumber
+                      style={{ width: "100%" }}
+                      placeholder="请输入水费"
+                      formatter={value => `水费 ${value} 元/吨`}
+                    />
+                  )}
+                </Form.Item>
               </Col>
               <Col span={6}>
-                {getFieldDecorator("electric", {
-                  initialValue: 1,
-                  rules: [{ required: true, message: "电费不能为空" }]
-                })(
-                  <InputNumber
-                    style={{ width: "100%" }}
-                    placeholder="请输入电费"
-                    formatter={value => `电费 ${value} 元/度`}
-                  />
-                )}
+                <Form.Item>
+                  {getFieldDecorator("electric", {
+                    initialValue: 1,
+                    rules: [{ required: true, message: "电费不能为空" }]
+                  })(
+                    <InputNumber
+                      style={{ width: "100%" }}
+                      placeholder="请输入电费"
+                      formatter={value => `电费 ${value} 元/度`}
+                    />
+                  )}
+                </Form.Item>
               </Col>
               <Col span={6}>
-                {getFieldDecorator("gmfs", {
-                  initialValue: 50,
-                  rules: [{ required: true, message: "网费不能为空" }]
-                })(
-                  <InputNumber
-                    style={{ width: "100%" }}
-                    placeholder="请输入网费"
-                    formatter={value => `网费 ${value} 元/月`}
-                  />
-                )}
+                <Form.Item>
+                  {getFieldDecorator("gmfs", {
+                    initialValue: 50,
+                    rules: [{ required: true, message: "网费不能为空" }]
+                  })(
+                    <InputNumber
+                      style={{ width: "100%" }}
+                      placeholder="请输入网费"
+                      formatter={value => `网费 ${value} 元/月`}
+                    />
+                  )}
+                </Form.Item>
               </Col>
             </Row>
           </Form.Item>

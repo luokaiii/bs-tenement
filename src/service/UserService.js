@@ -1,5 +1,9 @@
 import { AxiosRequest } from "./BaseApi";
 
+export const ping = () => {
+  return AxiosRequest.get("/user/ping");
+};
+
 export const login = params => {
   return AxiosRequest.post("/login", params);
 };
