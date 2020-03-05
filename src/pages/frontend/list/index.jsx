@@ -1,10 +1,28 @@
-import React from "react";
-import { Form, Checkbox } from "antd";
+import React, { useState } from "react";
+import { Form, Checkbox, List, Button } from "antd";
 
 import DetailsCard from "../../../components/DetailsCard";
 import "./index.less";
 
 export default () => {
+  const [data, setData] = useState([{}, {}, {}]);
+  const [loading, setLoading] = useState(false);
+
+  const handleMore = () => {
+    setLoading(true);
+    setTimeout(() => {
+      const copy = data;
+      copy.push({},{},{});
+      setData(copy);
+      setLoading(false);
+    }, 3000);
+  };
+
+  const loadMore = (
+    <Button block loading={loading} onClick={handleMore}>
+      加载更多
+    </Button>
+  );
   return (
     <div className="list">
       <div className="search-list">
@@ -64,12 +82,14 @@ export default () => {
           <Form.Item label="排序">综合 | 价格↓ | 面积↓</Form.Item>
         </Form>
       </div>
+
       <div className="content-list">
-        <DetailsCard />
-        <DetailsCard />
-        <DetailsCard />
-        <DetailsCard />
-        <DetailsCard />
+        <List
+          itemLayout="horizontal"
+          loadMore={loadMore}
+          dataSource={data}
+          renderItem={item => <DetailsCard />}
+        />
       </div>
     </div>
   );
