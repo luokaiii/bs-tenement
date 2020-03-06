@@ -6,7 +6,7 @@ export default ({ data }) => {
     <div className="goods-card">
       <div
         className="card"
-        onClick={() => (window.location.href = "/#/f/details/1")}
+        onClick={() => (window.location.href = `/#/f/details/${data.id}`)}
       >
         <div className="top">
           <img src={data.cover} alt="" />
