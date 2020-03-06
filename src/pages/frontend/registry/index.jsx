@@ -1,6 +1,17 @@
 import React, { useState } from "react";
-import { Form, Input, Icon, Button, Row, Col, InputNumber } from "antd";
+import {
+  Form,
+  Input,
+  Icon,
+  Button,
+  Row,
+  Col,
+  InputNumber,
+  message
+} from "antd";
 
+import { profiles } from "../../../components/constants";
+import { registry } from "../../../service/UserService";
 import "./index.less";
 
 export default Form.create()(({ form }) => {
@@ -49,7 +60,25 @@ export default Form.create()(({ form }) => {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log(values);
+        const data = Object.assign(
+          {
+            avatar: profiles[Math.floor(Math.random() * 12)],
+            role: "CUSTOMER",
+            disabled: false,
+            createDate: new Date()
+          },
+          values
+        );
+        registry(data)
+          .then(() => {
+            message.success("注册成功，2秒后跳转至登录页");
+            setTimeout(() => {
+              window.location.href = "/#/f/login";
+            }, 1500);
+          })
+          .catch(() => {
+            message.error("注册失败，用户已存在");
+          });
       }
     });
   };

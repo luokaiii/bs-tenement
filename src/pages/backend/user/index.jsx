@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from "react";
-import Tables from "../../../components/Tables";
+import React, { useState, useEffect, useCallback } from "react";
+import { getByPage, ping, updateDisabled } from "../../../service/UserService";
+import { message, Table, Button, Modal } from "antd";
 
+import CreateForm from "./create";
 import Search from "../../../components/Search";
-import { getByPage } from "../../../service/UserService";
-import { table } from "./constants";
-import { message } from "antd";
 
+const RoleText = {
+  CUSTOMER: "用户",
+  ADMIN: "管理员",
+  SUPER_ADMIN: "超级管理员"
+};
 const searchItems = [
   {
     key: "nickname",
@@ -17,74 +21,129 @@ const searchItems = [
   }
 ];
 
-export default () => {
-  const [data, setData] = useState({
-    content: [
-      {
-        id: 1,
-        nickname: "张老三",
-        username: "zhangsan",
-        phone: "13700012345",
-        disabled: true
-      },
-      {
-        id: 2,
-        nickname: "李老四",
-        username: "lisi",
-        phone: "13700012346",
-        disabled: false
-      },
-      {
-        id: 3,
-        nickname: "王老五",
-        username: "wangwu",
-        phone: "13700012347",
-        disabled: false
-      }
-    ],
-    number: 0,
-    total: 2,
-    size: 3
-  });
+const columns = update => [
+  {
+    title: "序号",
+    key: "number",
+    render: (...args) => args[2] + 1
+  },
+  {
+    title: "头像",
+    key: "avatar",
+    dataIndex: "avatar",
+    render: t => <img src={t} alt="" height="40px" />
+  },
+  {
+    title: "昵称",
+    key: "nickname",
+    dataIndex: "nickname"
+  },
+  {
+    title: "用户名",
+    key: "username",
+    dataIndex: "username"
+  },
+  {
+    title: "联系方式",
+    key: "phone",
+    dataIndex: "phone"
+  },
+  {
+    title: "当前状态",
+    key: "status",
+    dataIndex: "disabled",
+    render: t => (!!t ? "冻结" : "正常")
+  },
+  {
+    title: "操作",
+    key: "operate",
+    dataIndex: "disabled",
+    render: (t, r) =>
+      !!t ? (
+        <Button onClick={() => update(r.id, false)}>启用</Button>
+      ) : (
+        <Button onClick={() => update(r.id, true)}>禁用</Button>
+      )
+  }
+];
+
+export default ({ match }) => {
+  const { role } = match.params;
+  const [data, setData] = useState({});
+  const [user, setUser] = useState({});
+  const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = (params = { page: 0, size: 10, admin: false }) => {
-    setLoading(true);
-    getByPage(params)
-      .then(res => {
-        setData(res.data);
-        setLoading(false);
+  const update = (id, disabled) => {
+    updateDisabled(id, disabled)
+      .then(() => {
+        message.success("修改成功");
+        loadData();
       })
       .catch(() => {
-        message.error("加载失败");
-        setLoading(false);
+        message.error("修改失败");
       });
   };
 
-  const handleCreate = () => {
-    message.error("用户只能自行创建，无法后台添加");
+  const getLoginUser = () => {
+    ping().then(res => {
+      setUser(res.data);
+    });
   };
-  const handleChange = () => {};
+
+  const loadData = useCallback(
+    (params = { page: 0, size: 10, role }) => {
+      setLoading(true);
+      getByPage(params)
+        .then(res => {
+          setData(res.data);
+          setLoading(false);
+        })
+        .catch(() => {
+          message.error("加载失败");
+          setLoading(false);
+        });
+    },
+    [role]
+  );
+
+  useEffect(() => {
+    loadData();
+    getLoginUser();
+  }, [loadData]);
+
+  const pagination = {
+    current: data.number + 1,
+    total: data.totalElements,
+    pageSize: data.size,
+    onChange: (page, size) => {
+      loadData({ page: page - 1, size });
+    }
+  };
 
   return (
     <div>
       <div className="top">
         <div className="left">
-          <h2>前台用户管理</h2>
+          <h2>{RoleText[role]}管理</h2>
+        </div>
+        <div className="right">
+          {user.role === "SUPER_ADMIN" && role === "ADMIN" && (
+            <Button onClick={() => setVisible(true)}>创建</Button>
+          )}
         </div>
       </div>
-      <Search searchItems={searchItems} />
-      <Tables
-        table={table}
+      <Search searchItems={searchItems} handleChangeParams={loadData} />
+      <Table
+        bordered
+        columns={columns(update)}
         loading={loading}
-        data={data}
-        create={handleCreate}
-        onChange={handleChange}
+        dataSource={data.content}
+        pagination={pagination}
       />
+      <Modal visible={visible} footer={null} onCancel={() => setVisible(false)}>
+        <CreateForm />
+      </Modal>
     </div>
   );
 };

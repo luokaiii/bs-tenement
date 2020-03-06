@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Table, Button } from "antd";
+import { Table, Button, message } from "antd";
 
-import { getByPage } from "../../../service/HouseApi";
+import { getByPage, updateStatus } from "../../../service/HouseApi";
 import Search from "../../../components/Search";
 
 const HouseType = {
@@ -14,11 +14,30 @@ const StatusText = {
   OUT: "未上架记录",
   FAILED: "审核失败记录"
 };
-const StatusOperate = {
-  CREATED: <Button>审核通过</Button>,
-  ADDED: <Button>下架</Button>,
-  OUT: <Button>重新上架</Button>,
-  FAILED: <Button>重新上架</Button>
+const StatusOperate = (record, update) => {
+  switch (record.status) {
+    case "CREATED":
+      return (
+        <>
+          <Button onClick={() => update(record.id, "ADDED")}>审核通过</Button>{" "}
+          <Button onClick={() => update(record.id, "FAILED")} type="danger">
+            不通过
+          </Button>
+        </>
+      );
+    case "ADDED":
+      return <Button onClick={() => update(record.id, "OUT")}>下架</Button>;
+    case "OUT":
+      return (
+        <Button onClick={() => update(record.id, "ADDED")}>重新上架</Button>
+      );
+    case "FAILED":
+      return (
+        <Button onClick={() => update(record.id, "ADDED")}>重新上架</Button>
+      );
+    default:
+      break;
+  }
 };
 
 const searchItems = [
@@ -39,7 +58,7 @@ const searchItems = [
     label: "小区"
   }
 ];
-const columns = [
+const columns = update => [
   {
     title: "序号",
     key: "number",
@@ -82,7 +101,7 @@ const columns = [
     title: "操作",
     key: "status",
     dataIndex: "status",
-    render: t => StatusOperate[t]
+    render: (t, r) => StatusOperate(r, update)
   }
 ];
 
@@ -90,6 +109,17 @@ export default ({ match }) => {
   const [content, setContent] = useState({});
   const [loading, setLoading] = useState(false);
   const { type, status } = match.params;
+
+  const update = (id, s) => {
+    updateStatus(id, s)
+      .then(() => {
+        message.success("修改成功");
+        loadData();
+      })
+      .catch(() => {
+        message.error("修改失败");
+      });
+  };
 
   const loadData = useCallback(
     (params = { page: 0, size: 10 }) => {
@@ -117,7 +147,7 @@ export default ({ match }) => {
     total: content.totalElements,
     pageSize: content.size,
     onChange: (page, size) => {
-      loadData({ page: page - 1 });
+      loadData({ page: page - 1, size });
     }
   };
 
@@ -131,9 +161,9 @@ export default ({ match }) => {
           </h2>
         </div>
       </div>
-      <Search searchItems={searchItems} handleSearch={loadData} />
+      <Search searchItems={searchItems} handleChangeParams={loadData} />
       <Table
-        columns={columns}
+        columns={columns(update)}
         bordered
         loading={loading}
         dataSource={content.content}

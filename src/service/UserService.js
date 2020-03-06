@@ -4,8 +4,11 @@ export const ping = () => {
   return AxiosRequest.get("/user/ping");
 };
 
-export const login = params => {
-  return AxiosRequest.post("/login", params);
+export const login = (username, password) => {
+  const data = new FormData();
+  data.append("username", username);
+  data.append("password", password);
+  return AxiosRequest.post("/login", data);
 };
 
 export const logout = () => {
@@ -18,4 +21,12 @@ export const getById = id => {
 
 export const getByPage = params => {
   return AxiosRequest.get("/user", { params });
+};
+
+export const updateDisabled = (id, disabled) => {
+  return AxiosRequest.put(`/user/${id}/disabled?disabled=${disabled}`);
+};
+
+export const registry = data => {
+  return AxiosRequest.post("/user/registry", data);
 };

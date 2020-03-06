@@ -13,7 +13,7 @@ AxiosRequest.interceptors.response.use(
   error => {
     const { response } = error;
     if (response.status === 401) {
-      window.location.href = "/?#/login";
+      window.location.href = "/#/f/login";
     } else if (response.status === 403) {
       notification.warning({
         message: "没有权限！",
