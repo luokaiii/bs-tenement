@@ -11,13 +11,20 @@ export default Form.create()(({ match, form }) => {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState();
   const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const loadData = useCallback(
     params => {
+      setLoading(true);
       const data = Object.assign({ type, status: "ADDED", size: 6 }, params);
-      getByPage(data).then(res => {
-        setData(res.data.content);
-      });
+      getByPage(data)
+        .then(res => {
+          setData(res.data.content);
+          setLoading(false);
+        })
+        .catch(() => {
+          setLoading(false);
+        });
     },
     [type]
   );
@@ -34,11 +41,46 @@ export default Form.create()(({ match, form }) => {
     });
   };
 
-  const handleSearch = () => {
-    getByName();
+  const handleSearch = params => {
+    setLoading(true);
+    const data = Object.assign({ type, size: 6 }, params);
+    getByName(search, data)
+      .then(res => {
+        setData(res.data.content);
+        form.resetFields();
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   };
 
-  const loadMore = <Button block>加载更多</Button>;
+  const handleMore = () => {
+    setLoading(true);
+    form.validateFields((err, values) => {
+      const data = Object.assign(
+        { type, status: "ADDED", size: 6, page: page + 1 },
+        values
+      );
+      getByPage(data)
+        .then(res => {
+          setData(res.data.content);
+          setLoading(false);
+          if (!res.data.last) {
+            setPage(page + 1);
+          }
+        })
+        .catch(() => {
+          setLoading(false);
+        });
+    });
+  };
+
+  const loadMore = (
+    <Button block loading={loading} onClick={handleMore}>
+      加载更多
+    </Button>
+  );
 
   return (
     <div className="list">
@@ -108,6 +150,7 @@ export default Form.create()(({ match, form }) => {
 
       <div className="content-list">
         <List
+          loading={loading}
           itemLayout="horizontal"
           loadMore={loadMore}
           dataSource={data}
