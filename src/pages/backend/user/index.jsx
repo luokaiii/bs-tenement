@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { getByPage, ping, updateDisabled } from "../../../service/UserService";
 import { message, Table, Button, Modal } from "antd";
 
+import { useUser } from "../../../store/index";
 import CreateForm from "./create";
 import Search from "../../../components/Search";
 
@@ -70,9 +71,9 @@ const columns = update => [
 export default ({ match }) => {
   const { role } = match.params;
   const [data, setData] = useState({});
-  const [user, setUser] = useState({});
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { isSuperAdmin } = useUser().state;
 
   const update = (id, disabled) => {
     updateDisabled(id, disabled)
@@ -83,12 +84,6 @@ export default ({ match }) => {
       .catch(() => {
         message.error("修改失败");
       });
-  };
-
-  const getLoginUser = () => {
-    ping().then(res => {
-      setUser(res.data);
-    });
   };
 
   const loadData = useCallback(
@@ -109,7 +104,6 @@ export default ({ match }) => {
 
   useEffect(() => {
     loadData();
-    getLoginUser();
   }, [loadData]);
 
   const pagination = {
@@ -128,7 +122,7 @@ export default ({ match }) => {
           <h2>{RoleText[role]}管理</h2>
         </div>
         <div className="right">
-          {user.role === "SUPER_ADMIN" && role === "ADMIN" && (
+          {isSuperAdmin && role === "ADMIN" && (
             <Button onClick={() => setVisible(true)}>创建</Button>
           )}
         </div>

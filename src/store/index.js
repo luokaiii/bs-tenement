@@ -14,7 +14,12 @@ const reducer = (state, action) => {
   }
 };
 
-const initialState = { user: {}, isLogin: false, isAdmin: false };
+const initialState = {
+  user: {},
+  isLogin: false,
+  isAdmin: false,
+  isSuperAdmin: false
+};
 
 export const User = props => {
   const [state, dispatch] = useReducer(reducer, initialState);

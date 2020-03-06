@@ -18,7 +18,8 @@ export default () => {
         payload: {
           user: res.data,
           isLogin: true,
-          isAdmin: res.data.role === "ADMIN" || res.data.role === "SUPER_ADMIN"
+          isAdmin: res.data.role === "ADMIN",
+          isSuperAdmin: res.data.role === "SUPER_ADMIN"
         }
       });
     });
