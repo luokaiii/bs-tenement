@@ -1,11 +1,16 @@
 import React from "react";
 
+import {
+  HouseOwnerTypeText,
+  HousePlanText,
+  HouseTypeTagText
+} from "./constants";
 import "./DetailsCard.less";
-import { Icon } from "antd";
+import { Tag } from "antd";
 
-export default () => {
+export default ({ data }) => {
   const gotoDetails = () => {
-    window.location.href = `/#/f/details/1`;
+    window.location.href = `/#/f/details/${data.id}`;
   };
 
   return (
@@ -15,31 +20,37 @@ export default () => {
           <img
             className="pointer"
             onClick={gotoDetails}
-            src="http://cdn.baletoo.cn/Uploads/housephoto/2958/2957860/oss_5dd77093bdfb5.png@!380_280.png"
+            src={data.cover}
             alt=""
           />
         </div>
         <div className="dc12">
           <div className="title pointer" onClick={gotoDetails}>
-            绿泉公寓-静安 近地铁 可做饭 新上架 电梯房 智能电表
+            {data.name}
+            <Tag color="#f50">{HouseOwnerTypeText[data.ownerType]}</Tag>
           </div>
           <div className="model">
-            <Icon type="home" />
-            &nbsp; 合租|朝北-次卧|13㎡
+            <Tag color="#2db7f5">{HouseTypeTagText[data.type]}</Tag>
+            <Tag>{HouseOwnerTypeText[data.ownerType]}</Tag>
+            <Tag>{data.area}㎡</Tag>
+            <Tag>{HousePlanText[data.plan]}</Tag>
           </div>
         </div>
-        <div className="dc13">￥300000</div>
+        <div className="dc13">￥{data.price}元</div>
       </div>
       <div className="dc2">
         <div className="dc21">
           <img
-            src="https://dss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2841648446,236398816&fm=26&gp=0.jpg"
+            src={
+              data.userProfile ||
+              "https://dss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2841648446,236398816&fm=26&gp=0.jpg"
+            }
             alt=""
           />
-          <span className="name">孙先生</span>
+          <span className="name">{data.userNickname}</span>
           <span className="tag">房东</span>
         </div>
-        <div className="dc22">2020-03-04 发布</div>
+        <div className="dc22">{data.createTime || "2020-03-06"} 发布</div>
       </div>
     </div>
   );

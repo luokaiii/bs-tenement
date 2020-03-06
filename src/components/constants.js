@@ -12,3 +12,29 @@ export const profiles = [
   "https://img01.sogoucdn.com/app/a/100520146/39f0b1c71944f512e5146d0f8e99fb96",
   "https://img01.sogoucdn.com/app/a/100520146/f63128940cb838dc32d8d67be70566dc"
 ];
+
+export const HouseStatusText = {
+  CREATED: "审核中",
+  ADDED: "已上架",
+  OUT: "已下架",
+  FAILED: "审核失败"
+};
+
+export const HouseOwnerTypeText = {
+  ALL: "整租",
+  PART: "合租",
+  APART: "公寓"
+};
+
+export const HousePlanText = [
+  "一居室",
+  "两居室",
+  "三居室",
+  "四居室",
+  "五居室及以上"
+];
+
+export const HouseTypeTagText = {
+  SELL: "在售",
+  RENT: "出租"
+};

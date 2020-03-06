@@ -52,7 +52,7 @@ export default Form.create()(({ form, match }) => {
                 userProfile: avatar,
                 userPhone: phone,
                 status: "CREATED",
-                createTime: new Date().getMilliseconds
+                createTime: new Date()
               },
               values
             );

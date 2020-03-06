@@ -12,12 +12,12 @@ export default () => {
       {
         icon: "border-left",
         name: "二手房",
-        target: "/#/f/list/sell"
+        target: "/#/f/list/SELL"
       },
       {
         icon: "border-top",
         name: "出租房",
-        target: "/#/f/list/rent"
+        target: "/#/f/list/RENT"
       },
       {
         icon: "border-bottom",
@@ -48,7 +48,7 @@ export default () => {
   const D3Render = ({ name, type, ownerType }) => {
     const [data, setData] = useState([]);
     const gotoList = () => {
-      window.location.href = "/#/f/list/all";
+      window.location.href = `/#/f/list/${type}`;
     };
     useEffect(() => {
       getByPage({
@@ -106,12 +106,6 @@ export default () => {
             />
           </div>
         </Carousel>
-        <div className="d11">
-          <Input.Search
-            placeholder="输入地区、地铁、小区名进行搜索"
-            className="search"
-          />
-        </div>
       </div>
       <D2Render />
       <D3Render name="精选二手房" type="SELL" />

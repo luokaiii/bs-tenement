@@ -1,85 +1,108 @@
-import React, { useState } from "react";
-import { Form, Checkbox, List, Button } from "antd";
+import React, { useState, useEffect, useCallback } from "react";
+import { Form, Checkbox, List, Button, Input, Radio } from "antd";
 
+import { getByPage, getByName } from "../../../service/HouseApi";
 import DetailsCard from "../../../components/DetailsCard";
 import "./index.less";
 
-export default () => {
-  const [data, setData] = useState([{}, {}, {}]);
-  const [loading, setLoading] = useState(false);
+export default Form.create()(({ match, form }) => {
+  const { type } = match.params;
+  const { getFieldDecorator } = form;
+  const [data, setData] = useState([]);
+  const [search, setSearch] = useState();
+  const [page, setPage] = useState(0);
 
-  const handleMore = () => {
-    setLoading(true);
-    setTimeout(() => {
-      const copy = data;
-      copy.push({},{},{});
-      setData(copy);
-      setLoading(false);
-    }, 3000);
+  const loadData = useCallback(
+    params => {
+      const data = Object.assign({ type, status: "ADDED", size: 6 }, params);
+      getByPage(data).then(res => {
+        setData(res.data.content);
+      });
+    },
+    [type]
+  );
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  const handleChange = () => {
+    form.validateFields((err, values) => {
+      if (!err) {
+        loadData(values);
+      }
+    });
   };
 
-  const loadMore = (
-    <Button block loading={loading} onClick={handleMore}>
-      加载更多
-    </Button>
-  );
+  const handleSearch = () => {
+    getByName();
+  };
+
+  const loadMore = <Button block>加载更多</Button>;
+
   return (
     <div className="list">
+      <div style={{ textAlign: "center", margin: "20px 0" }}>
+        <Input.Search
+          placeholder="输入地区、地铁、小区名进行搜索"
+          className="search"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          onSearch={handleSearch}
+        />
+      </div>
       <div className="search-list">
         <div className="title">
-          <span>区域找房</span>
+          <span>综合找房</span>
         </div>
-        <Form labelCol={{ span: 2 }} wrapperCol={{ span: 22 }}>
-          <Form.Item label="区域">
-            <Checkbox.Group>
-              <Checkbox>不限</Checkbox>
-              <Checkbox>宝山</Checkbox>
-              <Checkbox>浦东</Checkbox>
-              <Checkbox>青浦</Checkbox>
-              <Checkbox>虹口</Checkbox>
-              <Checkbox>珠海</Checkbox>
-              <Checkbox>嘉定</Checkbox>
-              <Checkbox>徐汇</Checkbox>
-              <Checkbox>长宁</Checkbox>
-              <Checkbox>静安</Checkbox>
-              <Checkbox>奉贤</Checkbox>
-              <Checkbox>金山</Checkbox>
-              <Checkbox>崇明</Checkbox>
-              <Checkbox>崇明</Checkbox>
-              <Checkbox>崇明</Checkbox>
-              <Checkbox>崇明</Checkbox>
-              <Checkbox>崇明</Checkbox>
-            </Checkbox.Group>
-          </Form.Item>
-          <Form.Item label="价格">
-            <Checkbox.Group>
-              <Checkbox>不限</Checkbox>
-              <Checkbox>1500以下</Checkbox>
-              <Checkbox>1500-3000</Checkbox>
-              <Checkbox>3000-6000</Checkbox>
-              <Checkbox>6000-10000</Checkbox>
-              <Checkbox>10000以上</Checkbox>
-            </Checkbox.Group>
-          </Form.Item>
+        <Form
+          labelCol={{ span: 2 }}
+          wrapperCol={{ span: 22 }}
+          onChange={handleChange}
+        >
           <Form.Item label="类型">
-            <Checkbox.Group>
-              <Checkbox>不限</Checkbox>
-              <Checkbox>整租</Checkbox>
-              <Checkbox>合租</Checkbox>
-              <Checkbox>公寓</Checkbox>
-            </Checkbox.Group>
+            {getFieldDecorator("ownerType")(
+              <Radio.Group>
+                <Radio value={null}>不限</Radio>
+                <Radio value="ALL">整租</Radio>
+                <Radio value="PART">合租</Radio>
+                <Radio value="APART">公寓</Radio>
+              </Radio.Group>
+            )}
+          </Form.Item>
+          <Form.Item label="付款方式">
+            {getFieldDecorator("priceType")(
+              <Radio.Group>
+                <Radio value={null}>不限</Radio>
+                <Radio value="MONTH">月付</Radio>
+                <Radio value="QUARTER">季付</Radio>
+                <Radio value="HALF">半年付</Radio>
+                <Radio value="YEAR">年付</Radio>
+              </Radio.Group>
+            )}
           </Form.Item>
           <Form.Item label="户型">
-            <Checkbox.Group>
-              <Checkbox>不限</Checkbox>
-              <Checkbox>一居室</Checkbox>
-              <Checkbox>两居室</Checkbox>
-              <Checkbox>三居室</Checkbox>
-              <Checkbox>四居室以上</Checkbox>
-            </Checkbox.Group>
+            {getFieldDecorator("plan")(
+              <Radio.Group>
+                <Radio value={null}>不限</Radio>
+                <Radio value={1}>一居室</Radio>
+                <Radio value={2}>两居室</Radio>
+                <Radio value={3}>三居室</Radio>
+                <Radio value={4}>四居室</Radio>
+                <Radio value={5}>五居室及以上</Radio>
+              </Radio.Group>
+            )}
           </Form.Item>
           <hr color="#eee" />
-          <Form.Item label="排序">综合 | 价格↓ | 面积↓</Form.Item>
+          <Form.Item label="排序">
+            {getFieldDecorator("sort")(
+              <Radio.Group>
+                <Radio.Button value="id,desc">综合</Radio.Button>
+                <Radio.Button value="price,asc">价格↑</Radio.Button>
+                <Radio.Button value="area,desc">面积↓</Radio.Button>
+              </Radio.Group>
+            )}
+          </Form.Item>
         </Form>
       </div>
 
@@ -88,9 +111,9 @@ export default () => {
           itemLayout="horizontal"
           loadMore={loadMore}
           dataSource={data}
-          renderItem={item => <DetailsCard />}
+          renderItem={item => <DetailsCard data={item} />}
         />
       </div>
     </div>
   );
-};
+});

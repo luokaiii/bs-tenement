@@ -8,6 +8,10 @@ export const getByPage = params => {
   return AxiosRequest.get("/house", { params });
 };
 
+export const getByName = (name, params) => {
+  return AxiosRequest.get(`/house/name/${name}`, { params });
+};
+
 export const getById = id => {
   return AxiosRequest.get(`/house/${id}`);
 };
