@@ -1,11 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Layout, Button } from "antd";
 import { Switch, Route, Redirect, Link } from "react-router-dom";
 
+import { ping } from "../../service/UserService";
+import { useUser, STORE_CURRENT_USER } from "../../store/index";
 import Settings from "../../system-setting.json";
 import { frontRoutes } from "../../routerConfig";
 
 export default () => {
+  const { state, dispatch } = useUser();
+  const { isLogin, isAdmin } = state;
+
+  useEffect(() => {
+    ping().then(res => {
+      dispatch({
+        type: STORE_CURRENT_USER,
+        payload: {
+          user: res.data,
+          isLogin: true,
+          isAdmin: res.data.role === "ADMIN" || res.data.role === "SUPER_ADMIN"
+        }
+      });
+    });
+  }, [dispatch]);
+
   return (
     <div>
       <Layout className="layout">
@@ -17,14 +35,21 @@ export default () => {
               </Link>
             </div>
             <div className="right">
-              <Button type="link" href="/#/b/home">
-                进入后台
-              </Button>
-              <Button href="/#/f/login">登录</Button>
-              <Button href="/#/f/registry">注册</Button>
-              <Button type="primary" href="/#/f/me">
-                个人中心
-              </Button>
+              {isAdmin && (
+                <Button type="link" href="/#/b/home">
+                  进入后台
+                </Button>
+              )}
+              {isLogin ? (
+                <Button type="primary" href="/#/f/me">
+                  个人中心
+                </Button>
+              ) : (
+                <>
+                  <Button href="/#/f/login">登录</Button>
+                  <Button href="/#/f/registry">注册</Button>
+                </>
+              )}
             </div>
           </div>
         </Layout.Header>

@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Form, Input, Icon, Checkbox, Button, message } from "antd";
 
+import { UserContext, useUser, STORE_CURRENT_USER } from "../../../store/index";
 import { login } from "../../../service/UserService";
 import "./index.less";
 
 export default Form.create()(({ form }) => {
   const { getFieldDecorator } = form;
+  const { dispatch } = useUser();
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -13,6 +15,15 @@ export default Form.create()(({ form }) => {
       if (!err) {
         login(values.username, values.password).then(res => {
           message.success("登录成功，2秒后跳转至首页...");
+          dispatch({
+            type: STORE_CURRENT_USER,
+            payload: {
+              user: res.data,
+              isLogin: true,
+              isAdmin:
+                res.data.role === "ADMIN" || res.data.role === "SUPER_ADMIN"
+            }
+          });
           setTimeout(() => {
             window.location.href = "/#/f/home";
           }, 1500);

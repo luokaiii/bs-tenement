@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Layout, Menu, Icon, Button } from "antd";
 import { Switch, Route, Redirect, Link } from "react-router-dom";
 
+import { ping } from "../../service/UserService";
+import { useUser, STORE_CURRENT_USER } from "../../store/index";
 import settings from "../../system-setting.json";
 import { backRoutes } from "../../routerConfig";
 import "./BackLayout.less";
@@ -12,7 +14,21 @@ const { backend } = settings;
 
 export default () => {
   const [isMobile, setIsMobile] = useState(false);
+  const { dispatch } = useUser();
 
+  useEffect(() => {
+    ping().then(res => {
+      dispatch({
+        type: STORE_CURRENT_USER,
+        payload: {
+          user: res.data,
+          isLogin: true,
+          isAdmin: res.data.role === "ADMIN" || res.data.role === "SUPER_ADMIN"
+        }
+      });
+    });
+  }, [dispatch]);
+  
   const handleResize = e => {
     if (e.target.defaultView.visualViewport.width <= 768) {
       if (!isMobile) {
