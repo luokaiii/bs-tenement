@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Carousel, Input, Icon } from "antd";
 
+import { getByPage } from "../../../service/HouseApi";
 import GoodsCard from "../../../components/GoodsCard";
 import tuzi from "../../../static/tuzi2018.png";
 import "./index.less";
@@ -21,12 +22,12 @@ export default () => {
       {
         icon: "border-bottom",
         name: "出售报价",
-        target: "/#/f/publish/SELL"
+        target: "/?#/f/publish/SELL"
       },
       {
         icon: "border-right",
         name: "出租报价",
-        target: "/#/f/publish/RENT"
+        target: "/?#/f/publish/RENT"
       }
     ];
     const gotoList = t => {
@@ -44,10 +45,24 @@ export default () => {
     );
   };
 
-  const D3Render = ({ name }) => {
+  const D3Render = ({ name, type, ownerType }) => {
+    const [data, setData] = useState([]);
     const gotoList = () => {
       window.location.href = "/#/f/list/all";
     };
+    useEffect(() => {
+      getByPage({
+        page: 0,
+        size: 4,
+        sort: "id,desc",
+        type,
+        ownerType,
+        status: "ADDED"
+      }).then(res => {
+        setData(res.data.content);
+      });
+    }, [type, ownerType]);
+
     return (
       <div className="d3">
         <div className="more">
@@ -60,10 +75,9 @@ export default () => {
           </div>
         </div>
         <div className="list">
-          <GoodsCard data={{ name: "内容1" }} />
-          <GoodsCard data={{ name: "内容2" }} />
-          <GoodsCard data={{ name: "内容3" }} />
-          <GoodsCard data={{ name: "内容4" }} />
+          {data.map((v, i) => (
+            <GoodsCard data={v} key={i} />
+          ))}
         </div>
       </div>
     );
@@ -72,10 +86,10 @@ export default () => {
   return (
     <div className="home">
       <div className="d1">
-        <Carousel autoplay className="carousel">
+        <Carousel autoplay autoplaySpeed={5000} className="carousel">
           <div>
             <img
-              src="http://cdn.baletoo.cn/Uploads/bnanerImageUrl/1/148/oss_5c19e5a1063ea.jpg"
+              src="http://cdn.baletoo.cn/Uploads/bnanerImageUrl/1/67/oss_5a6a8dbe1086f.png"
               alt=""
             />
           </div>
@@ -87,7 +101,7 @@ export default () => {
           </div>
           <div>
             <img
-              src="http://cdn.baletoo.cn/Uploads/bnanerImageUrl/1/67/oss_5a6a8dbe1086f.png"
+              src="http://cdn.baletoo.cn/Uploads/bnanerImageUrl/1/148/oss_5c19e5a1063ea.jpg"
               alt=""
             />
           </div>
@@ -100,10 +114,10 @@ export default () => {
         </div>
       </div>
       <D2Render />
-      <D3Render name="精选二手房" />
-      <D3Render name="精选整租房" />
-      <D3Render name="精选合租房" />
-      <div className="d3">底部logo</div>
+      <D3Render name="精选二手房" type="SELL" />
+      <D3Render name="精选整租房" type="RENT" ownerType="ALL" />
+      <D3Render name="精选合租房" type="RENT" ownerType="PART" />
+      <D3Render name="精选公寓" type="RENT" ownerType="APART" />
     </div>
   );
 };

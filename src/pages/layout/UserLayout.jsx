@@ -2,14 +2,26 @@ import React, { useEffect } from "react";
 import { Layout, Button } from "antd";
 import { Switch, Route, Redirect, Link } from "react-router-dom";
 
-import { ping } from "../../service/UserService";
-import { useUser, STORE_CURRENT_USER } from "../../store/index";
+import { ping, logout } from "../../service/UserService";
+import {
+  useUser,
+  STORE_CURRENT_USER,
+  REMOVE_CURRENT_USER
+} from "../../store/index";
 import Settings from "../../system-setting.json";
 import { frontRoutes } from "../../routerConfig";
 
 export default () => {
   const { state, dispatch } = useUser();
-  const { isLogin, isAdmin } = state;
+  const { isLogin, isAdmin, isSuperAdmin } = state;
+
+  const quit = () => {
+    logout().then(() => {
+      dispatch({
+        type: REMOVE_CURRENT_USER
+      });
+    });
+  };
 
   useEffect(() => {
     ping().then(res => {
@@ -36,15 +48,18 @@ export default () => {
               </Link>
             </div>
             <div className="right">
-              {isAdmin && (
+              {(isAdmin || isSuperAdmin) && (
                 <Button type="link" href="/#/b/home">
                   进入后台
                 </Button>
               )}
               {isLogin ? (
-                <Button type="primary" href="/#/f/me">
-                  个人中心
-                </Button>
+                <>
+                  <Button type="primary" href="/#/f/me">
+                    个人中心
+                  </Button>
+                  <Button onClick={quit}>登出</Button>
+                </>
               ) : (
                 <>
                   <Button href="/#/f/login">登录</Button>
