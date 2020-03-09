@@ -48,18 +48,22 @@ export default Form.create()(({ match, form }) => {
   };
 
   const handleSearch = params => {
-    setLoading(true);
-    setLast(false);
-    const data = Object.assign({ type, size: 6 }, params);
-    getByName(search, data)
-      .then(res => {
-        setData(res.data.content);
-        form.resetFields();
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
+    if (search === null || search === "") {
+      handleChange();
+    } else {
+      setLoading(true);
+      setLast(false);
+      const data = Object.assign({ type, size: 6 }, params);
+      getByName(search, data)
+        .then(res => {
+          setData(res.data.content);
+          form.resetFields();
+          setLoading(false);
+        })
+        .catch(() => {
+          setLoading(false);
+        });
+    }
   };
 
   const handleMore = () => {
