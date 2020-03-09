@@ -12,7 +12,7 @@ import {
   Radio,
   message
 } from "antd";
-
+import moment from 'moment';
 import { upload } from "../../../service/FileApi";
 import { ping } from "../../../service/UserService";
 import { create } from "../../../service/HouseApi";
@@ -52,14 +52,14 @@ export default Form.create()(({ form, match }) => {
                 userProfile: avatar,
                 userPhone: phone,
                 status: "CREATED",
-                createTime: new Date()
+                createTime: moment()
               },
               values
             );
           })
           .then(res => {
             create(res).then(() => {
-              message.success("创建成功，2秒后跳转至个人中心");
+              message.success("发布成功，已提交至管理员审核...");
               setTimeout(() => {
                 window.location.href = "/#/f/me";
               }, 2000);

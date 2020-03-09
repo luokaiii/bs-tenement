@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Descriptions, Table, Divider, message, Button } from "antd";
 
-import { HouseStatusText } from "../../../components/constants";
+import { HouseStatusText, formatDate } from "../../../components/constants";
 import { getByPage, updateStatus } from "../../../service/HouseApi";
 import { useUser } from "../../../store/index";
 import "./index.less";
@@ -32,7 +32,8 @@ const columns = update => [
   {
     title: "发布时间",
     key: "createTime",
-    dataIndex: "createTime"
+    dataIndex: "createTime",
+    render: t => formatDate(t)
   },
   {
     title: "操作",

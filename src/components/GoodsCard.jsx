@@ -14,7 +14,9 @@ export default ({ data }) => {
         <div className="bottom">
           <div className="price">
             <div className="name">{data.name}</div>
-            <div className="price">{data.price}元</div>
+            <div className="price">
+              {data.price > 100000 ? data.price / 10000 + "万" : data.price}元
+            </div>
           </div>
           <div className="desc">
             {`${data.province}-${data.city} ${data.estate}`}

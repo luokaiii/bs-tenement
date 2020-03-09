@@ -103,7 +103,7 @@ export default ({ match }) => {
         onCancel={closeModal}
         onOk={closeModal}
       >
-        请拨打电话"{house.userPhone}"与房主联系预约
+        请拨打电话"{house.userPhone || '18867891234'}"与房主联系预约
       </Modal>
     </div>
   );

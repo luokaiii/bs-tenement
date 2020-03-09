@@ -1,5 +1,6 @@
 import React from "react";
 
+import { formatDate } from "../components/constants";
 import {
   HouseOwnerTypeText,
   HousePlanText,
@@ -50,7 +51,9 @@ export default ({ data }) => {
           <span className="name">{data.userNickname}</span>
           <span className="tag">房东</span>
         </div>
-        <div className="dc22">{data.createTime || "2020-03-06"} 发布</div>
+        <div className="dc22">
+          {formatDate(data.createTime) || "2020-03-06"} 发布
+        </div>
       </div>
     </div>
   );
