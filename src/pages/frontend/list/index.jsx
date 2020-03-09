@@ -69,7 +69,7 @@ export default Form.create()(({ match, form }) => {
         );
         getByPage(params)
           .then(res => {
-            setData([...res.data.content, ...data]);
+            setData([...data, ...res.data.content]);
             setLoading(false);
             if (!res.data.last) {
               setPage(page + 1);
