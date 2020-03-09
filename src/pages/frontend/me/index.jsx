@@ -106,7 +106,7 @@ export default () => {
     total: mySell.totalElements,
     pageSize: mySell.size,
     onChange: (page, size) => {
-      loadData1({ page: page - 1, size });
+      loadData1(page - 1);
     }
   };
 
@@ -115,7 +115,7 @@ export default () => {
     total: myRent.totalElements,
     pageSize: myRent.size,
     onChange: (page, size) => {
-      loadData2({ page: page - 1, size });
+      loadData2(page - 1);
     }
   };
 
