@@ -23,6 +23,9 @@ export default Form.create()(({ match, form }) => {
         .then(res => {
           setData(res.data.content);
           setLoading(false);
+          if (res.data.last) {
+            setLast(true);
+          }
         })
         .catch(() => {
           setLoading(false);
@@ -73,6 +76,8 @@ export default Form.create()(({ match, form }) => {
             setLoading(false);
             if (!res.data.last) {
               setPage(page + 1);
+            } else {
+              setLast(true);
             }
           })
           .catch(() => {
