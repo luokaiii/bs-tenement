@@ -21,13 +21,13 @@ export default () => {
       },
       {
         icon: "money-collect",
-        name: "出售报价",
-        target: "/?#/f/publish/SELL"
+        name: "发布售房信息",
+        target: "/#/f/publish/SELL"
       },
       {
         icon: "account-book",
-        name: "出租报价",
-        target: "/?#/f/publish/RENT"
+        name: "发布租房信息",
+        target: "/#/f/publish/RENT"
       }
     ];
     const gotoList = t => {

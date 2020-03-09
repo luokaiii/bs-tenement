@@ -12,7 +12,8 @@ import {
   Radio,
   message
 } from "antd";
-import moment from 'moment';
+import moment from "moment";
+import { useUser } from "../../../store/index";
 import { upload } from "../../../service/FileApi";
 import { ping } from "../../../service/UserService";
 import { create } from "../../../service/HouseApi";
@@ -27,6 +28,7 @@ export default Form.create()(({ form, match }) => {
   const [cover, setCover] = useState([]);
   const [pictures, setPictures] = useState([]);
   const { getFieldDecorator } = form;
+  const { user } = useUser().state;
   const type = match.params.type;
 
   const handleSubmit = () => {
@@ -36,34 +38,33 @@ export default Form.create()(({ form, match }) => {
           message.error("请先上传封面及详情图");
           return;
         }
-        ping()
-          .then(res => {
-            const { nickname, id, phone, avatar } = res.data;
-            const _cover = cover[0].url;
-            const _pictures = pictures.map(v => v.url);
-            return Object.assign(
-              {
-                type,
-                cover: _cover,
-                pictures: String(_pictures),
-                likeCount: 0,
-                userId: id,
-                userNickname: nickname,
-                userProfile: avatar,
-                userPhone: phone,
-                status: "CREATED",
-                createTime: moment()
-              },
-              values
-            );
+
+        const _cover = cover[0].url;
+        const _pictures = pictures.map(v => v.url);
+        const data = Object.assign(
+          {
+            type,
+            cover: _cover,
+            pictures: String(_pictures),
+            likeCount: 0,
+            userId: user.id,
+            userNickname: user.nickname,
+            userProfile: user.avatar,
+            userPhone: user.phone,
+            status: "CREATED",
+            createTime: moment()
+          },
+          values
+        );
+        create(data)
+          .then(() => {
+            message.success("发布成功，已提交至管理员审核...");
+            setTimeout(() => {
+              window.location.href = "/#/f/me";
+            }, 2000);
           })
-          .then(res => {
-            create(res).then(() => {
-              message.success("发布成功，已提交至管理员审核...");
-              setTimeout(() => {
-                window.location.href = "/#/f/me";
-              }, 2000);
-            });
+          .catch(() => {
+            message.error("发布失败");
           });
       }
     });

@@ -1,5 +1,9 @@
 import React from "react";
 
 export default () => {
-  return <div>这里是首页s</div>;
+  return (
+    <div>
+      <h2>欢迎来到“二手房中介平台”！</h2>
+    </div>
+  );
 };

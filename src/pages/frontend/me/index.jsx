@@ -60,39 +60,45 @@ export default () => {
     updateStatus(id, s)
       .then(() => {
         message.success("修改成功");
-        loadData1();
-        loadData2();
+        loadData1(0);
+        loadData2(0);
       })
       .catch(() => {
         message.error("修改失败");
       });
   };
 
-  const loadData1 = useCallback(() => {
-    getByPage({
-      page: 0,
-      size: 4,
-      userId: user.id,
-      type: "SELL"
-    }).then(res => {
-      setMySell(res.data);
-    });
-  }, [user]);
+  const loadData1 = useCallback(
+    page => {
+      getByPage({
+        page,
+        size: 4,
+        userId: user.id,
+        type: "SELL"
+      }).then(res => {
+        setMySell(res.data);
+      });
+    },
+    [user]
+  );
 
-  const loadData2 = useCallback(() => {
-    getByPage({
-      page: 0,
-      size: 4,
-      userId: user.id,
-      type: "RENT"
-    }).then(res => {
-      setMyRent(res.data);
-    });
-  }, [user]);
+  const loadData2 = useCallback(
+    page => {
+      getByPage({
+        page,
+        size: 4,
+        userId: user.id,
+        type: "RENT"
+      }).then(res => {
+        setMyRent(res.data);
+      });
+    },
+    [user]
+  );
 
   useEffect(() => {
-    loadData1();
-    loadData2();
+    loadData1(0);
+    loadData2(0);
   }, [loadData1, loadData2]);
 
   const pagination1 = {

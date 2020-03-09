@@ -1,10 +1,10 @@
 {
   "front": {
-    "name": "前台用户系统",
+    "name": "二手房屋中介平台",
     "logo": ""
   },
   "backend": {
-    "name": "后台管理系统",
+    "name": "房屋管理系统",
     "menu": {
       "mode": "inline",
       "defaultOpenKeys": ["/b/house/RENT", "/b/house/SELL", "/b/system"],

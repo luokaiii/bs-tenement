@@ -11,6 +11,7 @@ export default Form.create()(({ match, form }) => {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState();
   const [page, setPage] = useState(0);
+  const [last, setLast] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const loadData = useCallback(
@@ -36,6 +37,7 @@ export default Form.create()(({ match, form }) => {
   const handleChange = () => {
     form.validateFields((err, values) => {
       if (!err) {
+        setLast(false);
         loadData(values);
       }
     });
@@ -43,6 +45,7 @@ export default Form.create()(({ match, form }) => {
 
   const handleSearch = params => {
     setLoading(true);
+    setLast(false);
     const data = Object.assign({ type, size: 6 }, params);
     getByName(search, data)
       .then(res => {
@@ -58,21 +61,23 @@ export default Form.create()(({ match, form }) => {
   const handleMore = () => {
     setLoading(true);
     form.validateFields((err, values) => {
-      const data = Object.assign(
-        { type, status: "ADDED", size: 6, page: page + 1 },
-        values
-      );
-      getByPage(data)
-        .then(res => {
-          setData(res.data.content);
-          setLoading(false);
-          if (!res.data.last) {
-            setPage(page + 1);
-          }
-        })
-        .catch(() => {
-          setLoading(false);
-        });
+      if (!last) {
+        const params = Object.assign(
+          { type, status: "ADDED", size: 6, page: page + 1 },
+          values
+        );
+        getByPage(params)
+          .then(res => {
+            setData([...res.data.content, ...data]);
+            setLoading(false);
+            if (!res.data.last) {
+              setPage(page + 1);
+            }
+          })
+          .catch(() => {
+            setLoading(false);
+          });
+      }
     });
   };
 
