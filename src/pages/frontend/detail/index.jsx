@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, Tag, Button, Modal, Carousel, message } from "antd";
 
+import {
+  HouseOwnerTypeText,
+  HousePriceType
+} from "../../../components/constants";
 import { getById } from "../../../service/HouseApi";
 import "./index.less";
 
@@ -85,8 +89,8 @@ export default ({ match }) => {
             <Col span={12}>
               楼层：{house.floor}层/{house.floors}层
             </Col>
-            <Col span={12}>类型：{house.ownerType}</Col>
-            <Col span={12}>付款：{house.priceType}</Col>
+            <Col span={12}>类型：{HouseOwnerTypeText[house.ownerType]}</Col>
+            <Col span={12}>付款：{HousePriceType[house.priceType]}</Col>
             <Col span={12}>区域：{house.city}</Col>
           </Row>
           <div className="hr" />
@@ -103,7 +107,7 @@ export default ({ match }) => {
         onCancel={closeModal}
         onOk={closeModal}
       >
-        请拨打电话"{house.userPhone || '18867891234'}"与房主联系预约
+        请拨打电话"{house.userPhone || "18867891234"}"与房主联系预约
       </Modal>
     </div>
   );

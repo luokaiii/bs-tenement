@@ -51,3 +51,10 @@ export const HouseListText = {
   SELL: "精选二手房",
   RENT: "精选出租房"
 };
+
+export const HousePriceType = {
+  MONTH: "月付",
+  QUARTER: "季付",
+  HALF: "半年付",
+  YEAR: "年付"
+};
