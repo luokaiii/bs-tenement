@@ -61,17 +61,25 @@ const columns = (update, role, isAdmin, isSuperAdmin) => [
     dataIndex: "disabled",
     render: (t, r) => {
       if (role === "ADMIN") {
-        return isSuperAdmin && !!t ? (
-          <Button onClick={() => update(r.id, false)}>启用</Button>
-        ) : (
-          <Button onClick={() => update(r.id, true)}>禁用</Button>
-        );
+        if (isSuperAdmin) {
+          return !!t ? (
+            <Button onClick={() => update(r.id, false)}>启用</Button>
+          ) : (
+            <Button onClick={() => update(r.id, true)}>禁用</Button>
+          );
+        } else {
+          return <></>;
+        }
       } else {
-        return (isAdmin || isSuperAdmin) && !!t ? (
-          <Button onClick={() => update(r.id, false)}>启用</Button>
-        ) : (
-          <Button onClick={() => update(r.id, true)}>禁用</Button>
-        );
+        if (isAdmin || isSuperAdmin) {
+          return !!t ? (
+            <Button onClick={() => update(r.id, false)}>启用</Button>
+          ) : (
+            <Button onClick={() => update(r.id, true)}>禁用</Button>
+          );
+        } else {
+          return <></>;
+        }
       }
     }
   }
