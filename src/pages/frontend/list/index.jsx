@@ -111,7 +111,7 @@ export default Form.create()(({ match, form }) => {
         >
           <Form.Item label="类型">
             {getFieldDecorator("ownerType")(
-              <Radio.Group>
+              <Radio.Group disabled={type === "SELL"}>
                 <Radio value="">不限</Radio>
                 <Radio value="ALL">整租</Radio>
                 <Radio value="PART">合租</Radio>
@@ -121,7 +121,7 @@ export default Form.create()(({ match, form }) => {
           </Form.Item>
           <Form.Item label="付款方式">
             {getFieldDecorator("priceType")(
-              <Radio.Group>
+              <Radio.Group disabled={type === "SELL"}>
                 <Radio value="">不限</Radio>
                 <Radio value="MONTH">月付</Radio>
                 <Radio value="QUARTER">季付</Radio>
