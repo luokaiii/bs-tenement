@@ -83,7 +83,7 @@ export default Form.create()(({ match, form }) => {
   };
 
   const loadMore = (
-    <Button block loading={loading} onClick={handleMore}>
+    <Button block loading={loading} disabled={last} onClick={handleMore}>
       加载更多
     </Button>
   );

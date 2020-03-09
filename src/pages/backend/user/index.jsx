@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { getByPage,updateDisabled } from "../../../service/UserService";
+import { getByPage, updateDisabled } from "../../../service/UserService";
 import { message, Table, Button, Modal } from "antd";
 
 import { useUser } from "../../../store/index";
@@ -22,7 +22,7 @@ const searchItems = [
   }
 ];
 
-const columns = update => [
+const columns = (update, role, isAdmin, isSuperAdmin) => [
   {
     title: "序号",
     key: "number",
@@ -59,12 +59,21 @@ const columns = update => [
     title: "操作",
     key: "operate",
     dataIndex: "disabled",
-    render: (t, r) =>
-      !!t ? (
-        <Button onClick={() => update(r.id, false)}>启用</Button>
-      ) : (
-        <Button onClick={() => update(r.id, true)}>禁用</Button>
-      )
+    render: (t, r) => {
+      if (role === "ADMIN") {
+        return isSuperAdmin && !!t ? (
+          <Button onClick={() => update(r.id, false)}>启用</Button>
+        ) : (
+          <Button onClick={() => update(r.id, true)}>禁用</Button>
+        );
+      } else {
+        return (isAdmin || isSuperAdmin) && !!t ? (
+          <Button onClick={() => update(r.id, false)}>启用</Button>
+        ) : (
+          <Button onClick={() => update(r.id, true)}>禁用</Button>
+        );
+      }
+    }
   }
 ];
 
@@ -73,7 +82,7 @@ export default ({ match }) => {
   const [data, setData] = useState({});
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { isSuperAdmin } = useUser().state;
+  const { isAdmin, isSuperAdmin } = useUser().state;
 
   const update = (id, disabled) => {
     updateDisabled(id, disabled)
@@ -130,7 +139,7 @@ export default ({ match }) => {
       <Search searchItems={searchItems} handleChangeParams={loadData} />
       <Table
         bordered
-        columns={columns(update)}
+        columns={columns(update, role, isAdmin, isSuperAdmin)}
         loading={loading}
         dataSource={data.content}
         pagination={pagination}
