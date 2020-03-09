@@ -45,3 +45,8 @@ export const HouseTypeTagText = {
   SELL: "在售",
   RENT: "出租"
 };
+
+export const HouseListText = {
+  SELL: "精选二手房",
+  RENT: "精选出租房"
+};

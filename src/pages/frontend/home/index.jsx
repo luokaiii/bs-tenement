@@ -22,12 +22,12 @@ export default () => {
       {
         icon: "money-collect",
         name: "发布售房信息",
-        target: "/#/f/publish/SELL"
+        target: "/?#/f/publish/SELL"
       },
       {
         icon: "account-book",
         name: "发布租房信息",
-        target: "/#/f/publish/RENT"
+        target: "/?#/f/publish/RENT"
       }
     ];
     const gotoList = t => {

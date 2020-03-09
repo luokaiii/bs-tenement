@@ -2,7 +2,7 @@ import React from "react";
 import { Form, Input, Icon, Checkbox, Button, message } from "antd";
 
 import { useUser, STORE_CURRENT_USER } from "../../../store/index";
-import { login } from "../../../service/UserService";
+import { login, ping } from "../../../service/UserService";
 import "./index.less";
 
 export default Form.create()(({ form }) => {
@@ -13,21 +13,30 @@ export default Form.create()(({ form }) => {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        login(values.username, values.password).then(res => {
-          message.success("登录成功，2秒后跳转至首页...");
-          dispatch({
-            type: STORE_CURRENT_USER,
-            payload: {
-              user: res.data,
-              isLogin: true,
-              isAdmin:
-                res.data.role === "ADMIN" || res.data.role === "SUPER_ADMIN"
-            }
+        login(values.username, values.password)
+          .then(() => {
+            message.success("登录成功，2秒后跳转至首页...");
+            ping()
+              .then(res => {
+                dispatch({
+                  type: STORE_CURRENT_USER,
+                  payload: {
+                    user: res.data,
+                    isLogin: true,
+                    isAdmin: res.data.role === "ADMIN",
+                    isSuperAdmin: res.data.role === "SUPER_ADMIN"
+                  }
+                });
+              })
+              .then(() => {
+                setTimeout(() => {
+                  window.location.href = "/#/f/home";
+                }, 1500);
+              });
+          })
+          .catch(() => {
+            message.error("登录失败");
           });
-          setTimeout(() => {
-            window.location.href = "/#/f/home";
-          }, 1500);
-        });
       }
     });
   };

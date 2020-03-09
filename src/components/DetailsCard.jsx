@@ -28,7 +28,9 @@ export default ({ data }) => {
         <div className="dc12">
           <div className="title pointer" onClick={gotoDetails}>
             {data.name}
-            <Tag color="#f50">{HouseOwnerTypeText[data.ownerType]}</Tag>
+            {data.type === "RENT" && (
+              <Tag color="#f50">{HouseOwnerTypeText[data.ownerType]}</Tag>
+            )}
           </div>
           <div className="model">
             <Tag color="#2db7f5">{HouseTypeTagText[data.type]}</Tag>

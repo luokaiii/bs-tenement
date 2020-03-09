@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Form, List, Button, Input, Radio } from "antd";
+import { Form, List, Button, Input, Radio, Divider } from "antd";
 
+import { HouseListText } from "../../../components/constants";
 import { getByPage, getByName } from "../../../service/HouseApi";
 import DetailsCard from "../../../components/DetailsCard";
 import "./index.less";
@@ -89,6 +90,7 @@ export default Form.create()(({ match, form }) => {
 
   return (
     <div className="list">
+      <Divider children={HouseListText[type]} />
       <div style={{ textAlign: "center", margin: "20px 0" }}>
         <Input.Search
           placeholder="输入地区、地铁、小区名进行搜索"
@@ -110,7 +112,7 @@ export default Form.create()(({ match, form }) => {
           <Form.Item label="类型">
             {getFieldDecorator("ownerType")(
               <Radio.Group>
-                <Radio value={null}>不限</Radio>
+                <Radio value="">不限</Radio>
                 <Radio value="ALL">整租</Radio>
                 <Radio value="PART">合租</Radio>
                 <Radio value="APART">公寓</Radio>
@@ -120,7 +122,7 @@ export default Form.create()(({ match, form }) => {
           <Form.Item label="付款方式">
             {getFieldDecorator("priceType")(
               <Radio.Group>
-                <Radio value={null}>不限</Radio>
+                <Radio value="">不限</Radio>
                 <Radio value="MONTH">月付</Radio>
                 <Radio value="QUARTER">季付</Radio>
                 <Radio value="HALF">半年付</Radio>
@@ -131,7 +133,7 @@ export default Form.create()(({ match, form }) => {
           <Form.Item label="户型">
             {getFieldDecorator("plan")(
               <Radio.Group>
-                <Radio value={null}>不限</Radio>
+                <Radio value="">不限</Radio>
                 <Radio value={1}>一居室</Radio>
                 <Radio value={2}>两居室</Radio>
                 <Radio value={3}>三居室</Radio>

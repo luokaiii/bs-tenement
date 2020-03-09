@@ -35,37 +35,36 @@ export default Form.create()(({ form, match }) => {
     form.validateFields((err, values) => {
       if (!err) {
         if (cover.length <= 0 || pictures.length <= 0) {
-          message.error("请先上传封面及详情图");
-          return;
+          message.error("请先上传图片");
+        } else {
+          const _cover = cover[0].url;
+          const _pictures = pictures.map(v => v.url);
+          const data = Object.assign(
+            {
+              type,
+              cover: _cover,
+              pictures: String(_pictures),
+              likeCount: 0,
+              userId: user.id,
+              userNickname: user.nickname,
+              userProfile: user.avatar,
+              userPhone: user.phone,
+              status: "CREATED",
+              createTime: moment()
+            },
+            values
+          );
+          create(data)
+            .then(() => {
+              message.success("发布成功，已提交至管理员审核...");
+              setTimeout(() => {
+                window.location.href = "/?#/f/me";
+              }, 2000);
+            })
+            .catch(() => {
+              message.error("发布失败");
+            });
         }
-
-        const _cover = cover[0].url;
-        const _pictures = pictures.map(v => v.url);
-        const data = Object.assign(
-          {
-            type,
-            cover: _cover,
-            pictures: String(_pictures),
-            likeCount: 0,
-            userId: user.id,
-            userNickname: user.nickname,
-            userProfile: user.avatar,
-            userPhone: user.phone,
-            status: "CREATED",
-            createTime: moment()
-          },
-          values
-        );
-        create(data)
-          .then(() => {
-            message.success("发布成功，已提交至管理员审核...");
-            setTimeout(() => {
-              window.location.href = "/#/f/me";
-            }, 2000);
-          })
-          .catch(() => {
-            message.error("发布失败");
-          });
       }
     });
   };
