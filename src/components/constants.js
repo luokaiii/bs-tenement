@@ -34,6 +34,7 @@ export const HouseOwnerTypeText = {
 };
 
 export const HousePlanText = [
+  "",
   "一居室",
   "两居室",
   "三居室",
