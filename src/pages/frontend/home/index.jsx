@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Carousel, Input, Icon } from "antd";
+import { Carousel, Icon } from "antd";
 
 import { getByPage } from "../../../service/HouseApi";
 import GoodsCard from "../../../components/GoodsCard";

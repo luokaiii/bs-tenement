@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { getByPage, ping, updateDisabled } from "../../../service/UserService";
+import { getByPage,updateDisabled } from "../../../service/UserService";
 import { message, Table, Button, Modal } from "antd";
 
 import { useUser } from "../../../store/index";

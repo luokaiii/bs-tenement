@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Form, Checkbox, List, Button, Input, Radio } from "antd";
+import { Form, List, Button, Input, Radio } from "antd";
 
 import { getByPage, getByName } from "../../../service/HouseApi";
 import DetailsCard from "../../../components/DetailsCard";

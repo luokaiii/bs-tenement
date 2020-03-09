@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Form, Input, Icon, Checkbox, Button, message } from "antd";
 
-import { UserContext, useUser, STORE_CURRENT_USER } from "../../../store/index";
+import { useUser, STORE_CURRENT_USER } from "../../../store/index";
 import { login } from "../../../service/UserService";
 import "./index.less";
 
@@ -53,7 +53,7 @@ export default Form.create()(({ form }) => {
             {getFieldDecorator("password", {
               rules: [{ required: true, message: "密码不能为空" }]
             })(
-              <Input
+              <Input.Password
                 prefix={
                   <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
                 }
