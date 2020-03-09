@@ -10,22 +10,22 @@ export default () => {
   const D2Render = () => {
     const values = [
       {
-        icon: "border-left",
+        icon: "shop",
         name: "二手房",
         target: "/#/f/list/SELL"
       },
       {
-        icon: "border-top",
+        icon: "bank",
         name: "出租房",
         target: "/#/f/list/RENT"
       },
       {
-        icon: "border-bottom",
+        icon: "money-collect",
         name: "出售报价",
         target: "/?#/f/publish/SELL"
       },
       {
-        icon: "border-right",
+        icon: "account-book",
         name: "出租报价",
         target: "/?#/f/publish/RENT"
       }
@@ -37,7 +37,7 @@ export default () => {
       <div className="d2">
         {values.map((v, i) => (
           <div className="d21" key={i} onClick={() => gotoList(v.target)}>
-            <Icon type={v.icon} className="icon" />
+            <Icon type={v.icon} theme="twoTone" className="icon" />
             <div>{v.name}</div>
           </div>
         ))}
