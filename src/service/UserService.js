@@ -30,3 +30,9 @@ export const updateDisabled = (id, disabled) => {
 export const registry = data => {
   return AxiosRequest.post("/user/registry", data);
 };
+
+export const updatePassword = (username, phone, password) => {
+  return AxiosRequest.put(
+    `/user/reset?username=${username}&phone=${phone}&password=${password}`
+  );
+};

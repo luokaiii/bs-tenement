@@ -10,23 +10,12 @@ import {
   message
 } from "antd";
 
-import { profiles } from "../../../components/constants";
-import { registry } from "../../../service/UserService";
+import { updatePassword } from "../../../service/UserService";
 import "./index.less";
 
 export default Form.create()(({ form }) => {
-  const [authCode, setAuthCode] = useState(
-    Math.floor(Math.random() * 9000) + 1000
-  );
+  const [authCode, setAuthCode] = useState();
   const { getFieldDecorator } = form;
-
-  const checkUsername = (rule, value, callback) => {
-    if (value && (value.length < 6 || value.length > 18)) {
-      callback("用户名长度不正确");
-    } else {
-      callback();
-    }
-  };
 
   const checkPassword = (rule, value, callback) => {
     if (value && (value.length < 6 || value.length > 18)) {
@@ -60,71 +49,45 @@ export default Form.create()(({ form }) => {
     e.preventDefault();
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        const data = Object.assign(
-          {
-            avatar: profiles[Math.floor(Math.random() * 12)],
-            role: "CUSTOMER",
-            disabled: false,
-            createDate: new Date()
-          },
-          values
-        );
-        registry(data)
-          .then(() => {
-            message.success("注册成功，2秒后跳转至登录页");
-            setTimeout(() => {
-              window.location.href = "/#/f/login";
-            }, 1500);
+        updatePassword(values.username, values.phone, values.password)
+          .then(res => {
+            message.success("重置成功");
+            window.location.href = "/#/f/login";
           })
-          .catch(() => {
-            message.error("注册失败，用户已存在");
+          .catch(e => {
+            message.error("重置失败,请检查用户名与注册手机号是否相同");
           });
       }
     });
   };
 
   return (
-    <div className="registry">
-      <div style={{height:"150px"}}></div>
+    <div className="reset">
+      <div style={{ height: "150px" }}></div>
       <div className="login-div">
-        <h2 className="title">注 册</h2>
+        <h2 className="title">找回密码</h2>
         <Form className="form" onSubmit={handleSubmit}>
           <Form.Item>
             {getFieldDecorator("username", {
-              rules: [
-                { required: true, message: "用户名不能为空" },
-                { validator: checkUsername }
-              ]
+              rules: [{ required: true, message: "用户名不能为空" }]
             })(
               <Input
                 prefix={
                   <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
                 }
-                placeholder="用户名 为6-18位字母、数字组合"
-              />
-            )}
-          </Form.Item>
-          <Form.Item>
-            {getFieldDecorator("nickname", {
-              rules: [{ required: true, message: "昵称不能为空" }]
-            })(
-              <Input
-                prefix={
-                  <Icon type="smile" style={{ color: "rgba(0,0,0,.25)" }} />
-                }
-                placeholder="昵称 为2-12位字符"
+                placeholder="请输入用户名"
               />
             )}
           </Form.Item>
           <Form.Item>
             {getFieldDecorator("phone", {
-              rules: [{ required: true, message: "联系方式不能为空" }]
+              rules: [{ required: true, message: "必填项" }]
             })(
               <Input
                 prefix={
                   <Icon type="phone" style={{ color: "rgba(0,0,0,.25)" }} />
                 }
-                placeholder="请输入联系方式"
+                placeholder="请输入注册时的手机号"
               />
             )}
           </Form.Item>
@@ -140,7 +103,7 @@ export default Form.create()(({ form }) => {
                   <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
                 }
                 type="password"
-                placeholder="密码 为6-18位字母、数字组合"
+                placeholder="请输入新密码"
               />
             )}
           </Form.Item>
@@ -156,7 +119,7 @@ export default Form.create()(({ form }) => {
                   <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
                 }
                 type="password"
-                placeholder="请再次输入密码"
+                placeholder="请再次输入确认密码"
               />
             )}
           </Form.Item>
@@ -169,11 +132,11 @@ export default Form.create()(({ form }) => {
             })(
               <Row>
                 <Col span={16}>
-                  <InputNumber placeholder="请输入验证码" max={9999}/>
+                  <InputNumber placeholder="请输入验证码" max={9999} />
                 </Col>
                 <Col span={8}>
                   <div className="auth-code" onClick={updateCode}>
-                    {authCode}
+                    {authCode || <Icon type="sync" spin />}
                   </div>
                 </Col>
               </Row>
@@ -181,7 +144,7 @@ export default Form.create()(({ form }) => {
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
-              注 册
+              重置密码
             </Button>
           </Form.Item>
         </Form>

@@ -43,8 +43,9 @@ export default Form.create()(({ form }) => {
 
   return (
     <div className="login">
+      <div style={{ height: "150px" }}></div>
       <div className="login-div">
-        <h2 className="title">登 录</h2>
+        <h2 className="title">欢迎登陆</h2>
         <Form className="form" onSubmit={handleSubmit}>
           <Form.Item>
             {getFieldDecorator("username", {
@@ -72,9 +73,12 @@ export default Form.create()(({ form }) => {
           </Form.Item>
           <Form.Item>
             <Checkbox>记住我</Checkbox>
-            <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
+            <Button type="primary" htmlType="submit" block>
               登 录
             </Button>
+            <div style={{textAlign:"right"}}>
+              忘记密码？点我<Button type="link" href="/#/f/reset">找回密码</Button>
+            </div>
           </Form.Item>
         </Form>
       </div>
