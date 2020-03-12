@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Table, Button, message } from "antd";
 
+import { showConfirm } from "../../../components/constants";
 import { getByPage, updateStatus } from "../../../service/HouseApi";
 import Search from "../../../components/Search";
 
@@ -111,14 +112,16 @@ export default ({ match }) => {
   const { type, status } = match.params;
 
   const update = (id, s) => {
-    updateStatus(id, s)
-      .then(() => {
-        message.success("修改成功");
-        loadData();
-      })
-      .catch(() => {
-        message.error("修改失败");
-      });
+    showConfirm(() =>
+      updateStatus(id, s)
+        .then(() => {
+          message.success("修改成功");
+          loadData();
+        })
+        .catch(() => {
+          message.error("修改失败");
+        })
+    );
   };
 
   const loadData = useCallback(

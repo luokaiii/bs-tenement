@@ -5,6 +5,7 @@ import { message, Table, Button, Modal } from "antd";
 import { useUser } from "../../../store/index";
 import CreateForm from "./create";
 import Search from "../../../components/Search";
+import { showConfirm } from "../../../components/constants";
 
 const RoleText = {
   CUSTOMER: "用户",
@@ -93,14 +94,16 @@ export default ({ match }) => {
   const { isAdmin, isSuperAdmin } = useUser().state;
 
   const update = (id, disabled) => {
-    updateDisabled(id, disabled)
-      .then(() => {
-        message.success("修改成功");
-        loadData();
-      })
-      .catch(() => {
-        message.error("修改失败");
-      });
+    showConfirm(() => {
+      updateDisabled(id, disabled)
+        .then(() => {
+          message.success("修改成功");
+          loadData();
+        })
+        .catch(() => {
+          message.error("修改失败");
+        });
+    });
   };
 
   const loadData = useCallback(

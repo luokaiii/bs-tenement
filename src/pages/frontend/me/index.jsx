@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Descriptions, Table, Divider, message, Button } from "antd";
+import { Descriptions, Table, Divider, message, Button, Modal } from "antd";
 
-import { HouseStatusText, formatDate } from "../../../components/constants";
+import {
+  HouseStatusText,
+  formatDate,
+  showConfirm
+} from "../../../components/constants";
 import { getByPage, updateStatus } from "../../../service/HouseApi";
 import { useUser } from "../../../store/index";
 import "./index.less";
@@ -57,15 +61,17 @@ export default () => {
   }
 
   const update = (id, s) => {
-    updateStatus(id, s)
-      .then(() => {
-        message.success("修改成功");
-        loadData1(0);
-        loadData2(0);
-      })
-      .catch(() => {
-        message.error("修改失败");
-      });
+    showConfirm(() =>
+      updateStatus(id, s)
+        .then(() => {
+          message.success("修改成功");
+          loadData1(0);
+          loadData2(0);
+        })
+        .catch(() => {
+          message.error("修改失败");
+        })
+    );
   };
 
   const loadData1 = useCallback(

@@ -1,10 +1,21 @@
 import moment from "moment";
+import { Modal } from "antd";
 
 export const formatDate = date => {
   return moment(date)
     .utcOffset(900)
     .format("YYYY-MM-DD HH:mm:ss");
 };
+
+export const showConfirm = fun => {
+  Modal.confirm({
+    title: "确定要进行该操作吗？",
+    onOk() {
+      fun();
+    }
+  });
+};
+
 export const profiles = [
   "https://luokaiii.oss-cn-shanghai.aliyuncs.com/tenement/1.jpg",
   "https://luokaiii.oss-cn-shanghai.aliyuncs.com/tenement/2.jpg",
