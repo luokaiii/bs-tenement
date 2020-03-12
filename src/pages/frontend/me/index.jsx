@@ -9,6 +9,17 @@ import {
 import { getByPage, updateStatus } from "../../../service/HouseApi";
 import { useUser } from "../../../store/index";
 import "./index.less";
+import { Link } from "react-router-dom";
+
+const StatusOperate = (update, r) => {
+  if (r.status === "ADDED") {
+    return <Button onClick={() => update(r.id, "OUT")}>下架</Button>;
+  } else if (r.status === "OUT" || r.status === "FAILED") {
+    return <Button onClick={() => update(r.id, "CREATED")}>重新审核</Button>;
+  } else {
+    return "等待审核...";
+  }
+};
 
 const columns = update => [
   {
@@ -42,12 +53,12 @@ const columns = update => [
   {
     title: "操作",
     key: "operate",
-    render: (t, r) =>
-      r.status === "ADDED" ? (
-        <Button onClick={() => update(r.id, "OUT")}>下架</Button>
-      ) : (
-        <span></span>
-      )
+    render: (t, r) => StatusOperate(update, r)
+  },
+  {
+    title: "编辑",
+    key: "edit",
+    render: (t, r) => <Link to={`/f/publish/SELL/${r.id}`}>编辑</Link>
   }
 ];
 

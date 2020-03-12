@@ -23,3 +23,7 @@ export const updateStatus = (id, status) => {
 export const like = id => {
   return AxiosRequest.post(`/house/${id}/like`);
 };
+
+export const update = (id, data) => {
+  return AxiosRequest.put(`/house/${id}`, data);
+};

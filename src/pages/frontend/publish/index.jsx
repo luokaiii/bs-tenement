@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Form,
   Input,
@@ -15,8 +15,7 @@ import {
 import moment from "moment";
 import { useUser } from "../../../store/index";
 import { upload } from "../../../service/FileApi";
-import { ping } from "../../../service/UserService";
-import { create } from "../../../service/HouseApi";
+import { create, getById, update } from "../../../service/HouseApi";
 import "./index.less";
 
 const HouseType = {
@@ -25,11 +24,39 @@ const HouseType = {
 };
 
 export default Form.create()(({ form, match }) => {
+  const [goods, setGoods] = useState({});
   const [cover, setCover] = useState([]);
   const [pictures, setPictures] = useState([]);
   const { getFieldDecorator } = form;
   const { user } = useUser().state;
-  const type = match.params.type;
+  const { type, id } = match.params;
+
+  useEffect(() => {
+    if (id !== "0") {
+      getById(id).then(res => {
+        const goods = res.data;
+        setGoods(goods);
+        setCover([
+          {
+            uid: 0,
+            name: "image.jpg",
+            status: "done",
+            url: goods.cover
+          }
+        ]);
+        setPictures(
+          goods.pictures.split(",").map(v => {
+            return {
+              uid: v,
+              name: "image.jpg",
+              status: "done",
+              url: v
+            };
+          })
+        );
+      });
+    }
+  }, [id, form]);
 
   const handleSubmit = () => {
     form.validateFields((err, values) => {
@@ -54,16 +81,29 @@ export default Form.create()(({ form, match }) => {
             },
             values
           );
-          create(data)
-            .then(() => {
-              message.success("发布成功，已提交至管理员审核...");
-              setTimeout(() => {
-                window.location.href = "/?#/f/me";
-              }, 2000);
-            })
-            .catch(() => {
-              message.error("发布失败");
-            });
+          if (id !== "0") {
+            update(id, data)
+              .then(() => {
+                message.success("修改成功");
+                setTimeout(() => {
+                  window.location.href = "/?#/f/me";
+                }, 2000);
+              })
+              .catch(() => {
+                message.error("修改失败");
+              });
+          } else {
+            create(data)
+              .then(() => {
+                message.success("发布成功，已提交至管理员审核...");
+                setTimeout(() => {
+                  window.location.href = "/?#/f/me";
+                }, 2000);
+              })
+              .catch(() => {
+                message.error("发布失败");
+              });
+          }
         }
       }
     });
@@ -106,7 +146,10 @@ export default Form.create()(({ form, match }) => {
   return (
     <div className="publish">
       <div className="content">
-        <h2>发布{HouseType[type]}信息</h2>
+        <h2>
+          {id === "0" ? "发布" : "编辑"}
+          {HouseType[type]}信息
+        </h2>
         <Form
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 20 }}
@@ -117,11 +160,13 @@ export default Form.create()(({ form, match }) => {
           })(<React.Fragment />)}
           <Form.Item label="标题">
             {getFieldDecorator("name", {
+              initialValue: goods.name,
               rules: [{ required: true, message: "标题不能为空" }]
             })(<Input placeholder="请输入标题" />)}
           </Form.Item>
           <Form.Item label="关键词">
             {getFieldDecorator("keys", {
+              initialValue: goods.keys,
               rules: [{ required: true, message: "关键词不能为空" }]
             })(<Input placeholder="请输入关键词" />)}
           </Form.Item>
@@ -162,6 +207,7 @@ export default Form.create()(({ form, match }) => {
               <Col span={8}>
                 <Form.Item>
                   {getFieldDecorator("province", {
+                    initialValue: goods.province,
                     rules: [{ required: true, message: "关键词不能为空" }]
                   })(<Input placeholder="请输入省份" />)}
                 </Form.Item>
@@ -169,6 +215,7 @@ export default Form.create()(({ form, match }) => {
               <Col span={8}>
                 <Form.Item>
                   {getFieldDecorator("city", {
+                    initialValue: goods.city,
                     rules: [{ required: true, message: "关键词不能为空" }]
                   })(<Input placeholder="请输入市区" />)}
                 </Form.Item>
@@ -177,17 +224,20 @@ export default Form.create()(({ form, match }) => {
           </Form.Item>
           <Form.Item label="详细地址">
             {getFieldDecorator("address", {
+              initialValue: goods.address,
               rules: [{ required: true, message: "关键词不能为空" }]
             })(<Input placeholder="请输入详细地址" />)}
           </Form.Item>
           <Form.Item label="小区名称">
             {getFieldDecorator("estate", {
+              initialValue: goods.estate,
               rules: [{ required: true, message: "小区名称不能为空" }]
             })(<Input placeholder="请输入小区名称" />)}
           </Form.Item>
           {type === "SELL" ? (
             <Form.Item label="价格">
               {getFieldDecorator("price", {
+                initialValue: goods.price,
                 rules: [{ required: true, message: "价格不能为空" }]
               })(
                 <InputNumber
@@ -203,6 +253,7 @@ export default Form.create()(({ form, match }) => {
                 <Col span={8}>
                   <Form.Item>
                     {getFieldDecorator("price", {
+                      initialValue: goods.price,
                       rules: [{ required: true, message: "价格不能为空" }]
                     })(
                       <InputNumber
@@ -216,7 +267,7 @@ export default Form.create()(({ form, match }) => {
                 <Col span={8}>
                   <Form.Item>
                     {getFieldDecorator("priceType", {
-                      initialValue: "MONTH",
+                      initialValue: goods.priceType || "MONTH",
                       rules: [{ required: true, message: "付款方式不能为空" }]
                     })(
                       <Select>
@@ -236,7 +287,7 @@ export default Form.create()(({ form, match }) => {
               <Col span={6}>
                 <Form.Item>
                   {getFieldDecorator("area", {
-                    initialValue: 20,
+                    initialValue: goods.area || 20,
                     rules: [{ required: true, message: "房屋面积不能为空" }]
                   })(
                     <InputNumber
@@ -250,7 +301,7 @@ export default Form.create()(({ form, match }) => {
               <Col span={6}>
                 <Form.Item>
                   {getFieldDecorator("ownerType", {
-                    initialValue: "ALL",
+                    initialValue: goods.ownerType || "ALL",
                     rules: [{ required: true, message: "关键词不能为空" }]
                   })(
                     <Select>
@@ -268,7 +319,7 @@ export default Form.create()(({ form, match }) => {
               <Col span={6}>
                 <Form.Item>
                   {getFieldDecorator("floor", {
-                    initialValue: 1,
+                    initialValue: goods.floor || 1,
                     rules: [{ required: true, message: "楼层不能为空" }]
                   })(
                     <InputNumber
@@ -282,7 +333,7 @@ export default Form.create()(({ form, match }) => {
               <Col span={6}>
                 <Form.Item>
                   {getFieldDecorator("floors", {
-                    initialValue: 18,
+                    initialValue: goods.floors || 18,
                     rules: [{ required: true, message: "总楼层不能为空" }]
                   })(
                     <InputNumber
@@ -297,7 +348,7 @@ export default Form.create()(({ form, match }) => {
           </Form.Item>
           <Form.Item label="户型">
             {getFieldDecorator("plan", {
-              initialValue: 1
+              initialValue: goods.plan || 1
             })(
               <Radio.Group>
                 <Radio value={1}>一居室</Radio>
@@ -313,7 +364,7 @@ export default Form.create()(({ form, match }) => {
               <Col span={6}>
                 <Form.Item>
                   {getFieldDecorator("water", {
-                    initialValue: 6,
+                    initialValue: goods.water || 6,
                     rules: [{ required: true, message: "水费不能为空" }]
                   })(
                     <InputNumber
@@ -327,7 +378,7 @@ export default Form.create()(({ form, match }) => {
               <Col span={6}>
                 <Form.Item>
                   {getFieldDecorator("electric", {
-                    initialValue: 1,
+                    initialValue: goods.electric || 1,
                     rules: [{ required: true, message: "电费不能为空" }]
                   })(
                     <InputNumber
@@ -341,7 +392,7 @@ export default Form.create()(({ form, match }) => {
               <Col span={6}>
                 <Form.Item>
                   {getFieldDecorator("gmfs", {
-                    initialValue: 50,
+                    initialValue: goods.gmfs || 50,
                     rules: [{ required: true, message: "网费不能为空" }]
                   })(
                     <InputNumber
@@ -360,7 +411,7 @@ export default Form.create()(({ form, match }) => {
             htmlType="submit"
             style={{ margin: "30px 0 10px 0" }}
           >
-            确认发布
+            确认{id === "0" ? "发布" : "修改"}
           </Button>
         </Form>
       </div>

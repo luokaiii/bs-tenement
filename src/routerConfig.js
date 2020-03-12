@@ -28,7 +28,7 @@ export const frontRoutes = [
     component: FDetail
   },
   {
-    path: "/f/publish/:type",
+    path: "/f/publish/:type/:id",
     component: FPublish
   },
   {
