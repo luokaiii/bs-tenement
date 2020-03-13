@@ -1,11 +1,22 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Descriptions, Table, Divider, message, Button, Modal } from "antd";
+import {
+  Descriptions,
+  Table,
+  Divider,
+  message,
+  Button,
+  Modal,
+  Input,
+  Row,
+  Col
+} from "antd";
 
 import {
   HouseStatusText,
   formatDate,
   showConfirm
 } from "../../../components/constants";
+import { update as updateUser, getById } from "../../../service/UserService";
 import { getByPage, updateStatus } from "../../../service/HouseApi";
 import { useUser } from "../../../store/index";
 import "./index.less";
@@ -65,7 +76,11 @@ const columns = update => [
 export default () => {
   const [mySell, setMySell] = useState({});
   const [myRent, setMyRent] = useState({});
-  const { user, isLogin } = useUser().state;
+  const [modify, setModify] = useState(false);
+  const [loginUser, setLoginUser] = useState({});
+  const [nickname, setNickname] = useState("");
+  const userContext = useUser();
+  const { user, isLogin } = userContext.state;
 
   if (!isLogin) {
     window.location.href = "/";
@@ -84,6 +99,13 @@ export default () => {
         })
     );
   };
+
+  const loadUser = useCallback(() => {
+    getById(user.id).then(res => {
+      setLoginUser(res.data);
+      setNickname(res.data.nickname);
+    });
+  }, [user]);
 
   const loadData1 = useCallback(
     page => {
@@ -114,9 +136,10 @@ export default () => {
   );
 
   useEffect(() => {
+    loadUser();
     loadData1(0);
     loadData2(0);
-  }, [loadData1, loadData2]);
+  }, [loadUser, loadData1, loadData2]);
 
   const pagination1 = {
     current: mySell.number + 1,
@@ -136,16 +159,44 @@ export default () => {
     }
   };
 
+  const updateUsername = () => {
+    user.nickname = nickname;
+    updateUser(user.id, user).then(res => {
+      setModify(false);
+    });
+  };
+
   return (
     <div className="me">
       <div className="title">用户信息</div>
       <Descriptions bordered column={1}>
         <Descriptions.Item label="头像">
-          <img alt="" src={user.avatar} height="50px" />
+          <img alt="" src={loginUser.avatar} height="50px" />
         </Descriptions.Item>
-        <Descriptions.Item label="昵称">{user.nickname}</Descriptions.Item>
-        <Descriptions.Item label="用户名">{user.username}</Descriptions.Item>
-        <Descriptions.Item label="手机号">{user.phone}</Descriptions.Item>
+        {modify ? (
+          <Descriptions.Item label="昵称">
+            <Row>
+              <Col span={10}>
+                <Input
+                  value={nickname}
+                  onChange={e => setNickname(e.target.value)}
+                />
+              </Col>
+              <Col span={6}>
+                <Button onClick={updateUsername}>保存</Button>
+              </Col>
+            </Row>
+          </Descriptions.Item>
+        ) : (
+          <Descriptions.Item label="昵称">
+            {nickname} <Button onClick={() => setModify(true)}>修改</Button>
+          </Descriptions.Item>
+        )}
+
+        <Descriptions.Item label="用户名">
+          {loginUser.username}
+        </Descriptions.Item>
+        <Descriptions.Item label="手机号">{loginUser.phone}</Descriptions.Item>
       </Descriptions>
       <Divider children="我发布的二手房" orientation="left" />
       <Table

@@ -11,6 +11,10 @@ export const login = (username, password) => {
   return AxiosRequest.post("/login", data);
 };
 
+export const update = (id, data) => {
+  return AxiosRequest.put(`/user/${id}`, data);
+};
+
 export const logout = () => {
   return AxiosRequest.post("/logout");
 };
