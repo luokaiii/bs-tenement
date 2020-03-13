@@ -69,7 +69,11 @@ const columns = update => [
   {
     title: "编辑",
     key: "edit",
-    render: (t, r) => <Link to={`/f/publish/SELL/${r.id}`}>编辑</Link>
+    render: (t, r) => (
+      <Button href={`/?#/f/publish/SELL/${r.id}`} type="link">
+        编辑
+      </Button>
+    )
   }
 ];
 

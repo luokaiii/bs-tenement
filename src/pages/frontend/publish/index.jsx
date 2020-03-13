@@ -105,7 +105,7 @@ export default Form.create()(({ form, match }) => {
               .then(() => {
                 message.success("发布成功，已提交至管理员审核...");
                 setTimeout(() => {
-                  window.location.href = "/?#/f/me";
+                  window.location.href = "/#/f/me";
                 }, 2000);
               })
               .catch(() => {
