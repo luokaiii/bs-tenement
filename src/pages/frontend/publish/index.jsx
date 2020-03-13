@@ -15,6 +15,7 @@ import {
 import moment from "moment";
 import { useUser } from "../../../store/index";
 import { upload } from "../../../service/FileApi";
+import { areas } from "./area.jsx";
 import { create, getById, update } from "../../../service/HouseApi";
 import "./index.less";
 
@@ -27,6 +28,7 @@ export default Form.create()(({ form, match }) => {
   const [goods, setGoods] = useState({});
   const [cover, setCover] = useState([]);
   const [pictures, setPictures] = useState([]);
+  const [city, setCity] = useState([]);
   const { getFieldDecorator } = form;
   const { user } = useUser().state;
   const { type, id } = match.params;
@@ -56,7 +58,13 @@ export default Form.create()(({ form, match }) => {
         );
       });
     }
-  }, [id, form]);
+  }, [id]);
+
+  const chooseCity = e => {
+    console.log(e);
+
+    setCity(areas.find(v => v.province === e).citys);
+  };
 
   const handleSubmit = () => {
     form.validateFields((err, values) => {
@@ -209,7 +217,15 @@ export default Form.create()(({ form, match }) => {
                   {getFieldDecorator("province", {
                     initialValue: goods.province,
                     rules: [{ required: true, message: "关键词不能为空" }]
-                  })(<Input placeholder="请输入省份" />)}
+                  })(
+                    <Select onChange={chooseCity}>
+                      {areas.map((v, i) => (
+                        <Select.Option key={i} value={v.province}>
+                          {v.province}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  )}
                 </Form.Item>
               </Col>
               <Col span={8}>
@@ -217,7 +233,13 @@ export default Form.create()(({ form, match }) => {
                   {getFieldDecorator("city", {
                     initialValue: goods.city,
                     rules: [{ required: true, message: "关键词不能为空" }]
-                  })(<Input placeholder="请输入市区" />)}
+                  })(
+                    <Select>
+                      {city.map((v, i) => (
+                        <Select.Option key={i} value={v}>{v}</Select.Option>
+                      ))}
+                    </Select>
+                  )}
                 </Form.Item>
               </Col>
             </Row>
