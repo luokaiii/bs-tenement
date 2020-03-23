@@ -1,6 +1,6 @@
 import React from "react";
 
-import { formatDate } from "../components/constants";
+import { formatDate } from "./constants";
 import {
   HouseOwnerTypeText,
   HousePlanText,

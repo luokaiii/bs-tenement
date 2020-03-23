@@ -15,7 +15,7 @@ import {
 import moment from "moment";
 import { useUser } from "../../../store/index";
 import { upload } from "../../../service/FileApi";
-import { areas } from "./area.jsx";
+import { areas } from "./area.jsx.js";
 import { create, getById, update } from "../../../service/HouseApi";
 import "./index.less";
 
