@@ -8,7 +8,7 @@ import {
   STORE_CURRENT_USER,
   REMOVE_CURRENT_USER
 } from "../../store/index";
-import Settings from "../../system-setting.json.js";
+import Settings from "../../system-setting.json";
 import { frontRoutes } from "../../routerConfig";
 
 export default () => {
