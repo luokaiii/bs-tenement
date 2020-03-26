@@ -4,7 +4,7 @@ import { Switch, Route, Redirect, Link } from "react-router-dom";
 
 import { ping } from "../../service/UserService";
 import { useUser, STORE_CURRENT_USER } from "../../store/index";
-import settings from "../../system-setting.json.js";
+import settings from "../../system-setting.json";
 import { backRoutes } from "../../routerConfig";
 import "./BackLayout.less";
 
