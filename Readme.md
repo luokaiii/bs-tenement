@@ -4,31 +4,31 @@
 
 包含用户注册、登录、找回密码等功能，区分前台用户与后台管理员。并预留一个超级管理员。
 
-<img src="./static/login.png" style="zoom:75%;" />
+![login.png](https://i.loli.net/2021/05/08/HJ7q8feax1lPZER.png)
 
 ### 项目首页
 
 包含轮播广告、按二手房、整租房等分类展示，进入分类的入口及发布入口。
 
-<img src="./static/home.png" style="zoom:75%;" />
+![home.png](https://i.loli.net/2021/05/08/qAb2jCdRNnDUWFu.png)
 
 ### 分类详情页
 
 能够按各种类型区分、名称小区模糊搜索、价格面积排序、分页加载等功能。
 
-<img src="./static/tags.png" style="zoom:75%;" />
+![tags.png](https://i.loli.net/2021/05/08/9mnOhLtxJz8C5Sk.png)
 
 ### 商品详情页
 
 包含商品详细信息、相关推荐、地址地图等功能。
 
-<img src="./static/details.png" style="zoom:75%;" />
+![details.png](https://i.loli.net/2021/05/08/T5Lf4NDn8cQSx3p.png)
 
 ### 后台管理
 
 后台管理需要具有超级管理员或管理员权限。包含二手房、出租房、用户、后台账户管理等功能。
 
-<img src="./static/back.png" style="zoom:75%;" />
+![back.png](https://i.loli.net/2021/05/08/8Hx7GYqWLb2PjQV.png)
 
 ## 二、项目部署
 
